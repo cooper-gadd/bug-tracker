@@ -7,7 +7,7 @@ export default function App() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
           <p className="text-muted-foreground">
-            Here&apos;s a list of your tasks for this month!
+            Here&apos;s a list of your bugs for Whatever!
           </p>
         </div>
         <div className="flex items-center space-x-2">
