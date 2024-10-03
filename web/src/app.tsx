@@ -1,4 +1,4 @@
-import { UserNav } from "./components/user-nav";
+import { UserNav } from "@/components/user-nav";
 
 export default function App() {
   return (
