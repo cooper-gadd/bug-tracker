@@ -34,7 +34,7 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuItem>Projects</DropdownMenuItem>
           <DropdownMenuItem>Bugs</DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
+          <DropdownMenuItem>Users</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Log out</DropdownMenuItem>
