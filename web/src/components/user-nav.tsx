@@ -10,6 +10,9 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
+//TODO: Add user data from context
+//TODO: Display options based on user role
+//TODO: Add logout functionality
 export function UserNav() {
   return (
     <DropdownMenu>
