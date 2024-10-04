@@ -67,17 +67,29 @@ export const columns: ColumnDef<Bug>[] = [
   {
     header: "Date Raised",
     accessorKey: "dateRaised",
-    cell: ({ row }) => row.original.dateRaised.toLocaleDateString(),
+    cell: ({ row }) =>
+      row.original.dateRaised.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
   },
   {
     header: "Target Date",
     accessorKey: "targetDate",
-    cell: ({ row }) => row.original.targetDate?.toLocaleDateString() || "N/A",
+    cell: ({ row }) =>
+      row.original.targetDate?.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }) || "N/A",
   },
   {
     header: "Date Closed",
     accessorKey: "dateClosed",
-    cell: ({ row }) => row.original.dateClosed?.toLocaleDateString() || "N/A",
+    cell: ({ row }) =>
+      row.original.targetDate?.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }) || "N/A",
   },
   {
     id: "actions",
