@@ -16,6 +16,7 @@ export const columns: ColumnDef<BugTable>[] = [
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
+        className="translate-y-[2px]"
       />
     ),
     cell: ({ row }) => (
@@ -53,11 +54,11 @@ export const columns: ColumnDef<BugTable>[] = [
     },
   },
   {
-    accessorKey: "project.name",
+    accessorKey: "project",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Project" />
     ),
-    cell: ({ row }) => row.original.project.project,
+    cell: ({ row }) => row.original.project,
   },
   {
     accessorKey: "status",
@@ -66,7 +67,7 @@ export const columns: ColumnDef<BugTable>[] = [
     ),
     cell: ({ row }) => {
       const status = statuses.find(
-        (status) => status.value === row.original.status.status,
+        (status) => status.value === row.getValue("status"),
       );
 
       if (!status) {
@@ -93,7 +94,7 @@ export const columns: ColumnDef<BugTable>[] = [
     ),
     cell: ({ row }) => {
       const priority = priorities.find(
-        (priority) => priority.value === row.original.priority.priority,
+        (priority) => priority.value === row.getValue("priority"),
       );
 
       if (!priority) {
@@ -114,22 +115,22 @@ export const columns: ColumnDef<BugTable>[] = [
     },
   },
   {
-    accessorKey: "owner.name",
+    accessorKey: "owner",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Owner" />
     ),
   },
   {
-    accessorKey: "assignedTo.name",
+    accessorKey: "assignee",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Assigned To" />
+      <DataTableColumnHeader column={column} title="Assignee" />
     ),
-    cell: ({ row }) => row.original.assignedTo?.name || "Unassigned",
+    cell: ({ row }) => row.original.assignedTo || "Unassigned",
   },
   {
-    accessorKey: "dateRaised",
+    accessorKey: "raised",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date Raised" />
+      <DataTableColumnHeader column={column} title="Raised" />
     ),
     cell: ({ row }) =>
       row.original.dateRaised.toLocaleDateString("en-US", {
@@ -138,9 +139,9 @@ export const columns: ColumnDef<BugTable>[] = [
       }),
   },
   {
-    accessorKey: "targetDate",
+    accessorKey: "target",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Target Date" />
+      <DataTableColumnHeader column={column} title="Target" />
     ),
     cell: ({ row }) =>
       row.original.targetDate?.toLocaleDateString("en-US", {
@@ -149,9 +150,9 @@ export const columns: ColumnDef<BugTable>[] = [
       }) || "N/A",
   },
   {
-    accessorKey: "dateClosed",
+    accessorKey: "closed",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date Closed" />
+      <DataTableColumnHeader column={column} title="Closed" />
     ),
     cell: ({ row }) =>
       row.original.targetDate?.toLocaleDateString("en-US", {

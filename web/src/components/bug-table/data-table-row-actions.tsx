@@ -44,7 +44,7 @@ export function DataTableRowActions<TData>({
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>Priority</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={bug.priority.priority}>
+            <DropdownMenuRadioGroup value={bug.priority}>
               {priorities.map((priority) => (
                 <DropdownMenuRadioItem
                   key={priority.value}
@@ -60,7 +60,7 @@ export function DataTableRowActions<TData>({
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={bug.status.status}>
+            <DropdownMenuRadioGroup value={bug.status}>
               {statuses.map((status) => (
                 <DropdownMenuRadioItem key={status.value} value={status.value}>
                   {status.label}
