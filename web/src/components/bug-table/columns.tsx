@@ -60,19 +60,32 @@ export const columns: ColumnDef<Bug>[] = [
   {
     header: "Raised",
     accessorKey: "raised",
+    cell: ({ row }) =>
+      (row.getValue("raised") as Date).toLocaleDateString("en-US", {
+        month: "numeric",
+        day: "2-digit",
+      }),
   },
   {
     header: "Target",
     accessorKey: "target",
+    cell: ({ row }) =>
+      (row.getValue("raised") as Date).toLocaleDateString("en-US", {
+        month: "numeric",
+        day: "2-digit",
+      }),
   },
   {
     header: "Closed",
     accessorKey: "closed",
+    cell: ({ row }) =>
+      (row.getValue("raised") as Date).toLocaleDateString("en-US", {
+        month: "numeric",
+        day: "2-digit",
+      }),
   },
   {
     header: "Fixed Description",
     accessorKey: "fixedDescription",
   },
 ];
-
-export function BugTable() {}
