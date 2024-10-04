@@ -1,24 +1,31 @@
 import { UserNav } from "@/components/user-nav";
-import { Bug, columns } from "./components/bug-table/columns";
+import { columns } from "./components/bug-table/columns";
 import { DataTable } from "./components/bug-table/data-table";
+import { BugTable } from "./data/schema";
 
 export default function App() {
-  const bugs: Bug[] = [
+  const bugs: BugTable[] = [
     {
       id: 1,
       summary: "Minor UI glitch",
       description: "Small visual inconsistency in the dashboard",
       project: {
         id: 1,
-        name: "Project Alpha",
+        project: "Project Alpha",
       },
       owner: {
         id: 1,
         name: "Alice Johnson",
       },
       assignedTo: null,
-      status: "Unassigned",
-      priority: "Low",
+      status: {
+        id: 1,
+        status: "Unassigned",
+      },
+      priority: {
+        id: 1,
+        priority: "Low",
+      },
       dateRaised: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
       targetDate: null,
       dateClosed: null,
@@ -30,7 +37,7 @@ export default function App() {
       description: "Search results are loading slowly for large datasets",
       project: {
         id: 1,
-        name: "Project Alpha",
+        project: "Project Alpha",
       },
       owner: {
         id: 2,
@@ -40,8 +47,14 @@ export default function App() {
         id: 3,
         name: "Charlie Davis",
       },
-      status: "Assigned",
-      priority: "Medium",
+      status: {
+        id: 2,
+        status: "Assigned",
+      },
+      priority: {
+        id: 2,
+        priority: "Medium",
+      },
       dateRaised: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
       targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
       dateClosed: null,
@@ -53,7 +66,7 @@ export default function App() {
       description: "Monthly reports showing incorrect totals",
       project: {
         id: 2,
-        name: "Project Beta",
+        project: "Project Beta",
       },
       owner: {
         id: 4,
@@ -63,8 +76,14 @@ export default function App() {
         id: 5,
         name: "Ethan Foster",
       },
-      status: "Closed",
-      priority: "High",
+      status: {
+        id: 3,
+        status: "Closed",
+      },
+      priority: {
+        id: 3,
+        priority: "High",
+      },
       dateRaised: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 14 days ago
       targetDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
       dateClosed: new Date(),
@@ -76,7 +95,7 @@ export default function App() {
       description: "Potential data breach in user authentication system",
       project: {
         id: 3,
-        name: "Project Gamma",
+        project: "Project Gamma",
       },
       owner: {
         id: 6,
@@ -86,8 +105,14 @@ export default function App() {
         id: 7,
         name: "Grace Taylor",
       },
-      status: "Assigned",
-      priority: "Urgent",
+      status: {
+        id: 2,
+        status: "Assigned",
+      },
+      priority: {
+        id: 4,
+        priority: "Urgent",
+      },
       dateRaised: new Date(), // Today
       targetDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
       dateClosed: null,

@@ -1,41 +1,11 @@
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { priorities, statuses } from "@/data/bug-data";
+import { BugTable } from "@/data/schema";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableRowActions } from "./data-table-row-actions.tsx";
 
-export type Bug = {
-  id: number;
-  project: {
-    id: number;
-    name: string;
-  };
-  owner: {
-    id: number;
-    name: string;
-  };
-  assignedTo: {
-    id: number;
-    name: string;
-  } | null;
-  status: "Unassigned" | "Assigned" | "Closed";
-  priority: "Low" | "Medium" | "High" | "Urgent";
-  summary: string;
-  description: string;
-  fixedDescription: string | null;
-  dateRaised: Date;
-  targetDate: Date | null;
-  dateClosed: Date | null;
-};
-
-export const columns: ColumnDef<Bug>[] = [
+export const columns: ColumnDef<BugTable>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -59,47 +29,108 @@ export const columns: ColumnDef<Bug>[] = [
     enableHiding: false,
   },
   {
-    header: ({ column }) => {
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Bug" />
+    ),
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "summary",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Summary" />
+    ),
+    cell: ({ row }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          ID
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("summary")}
+          </span>
+        </div>
       );
     },
-    accessorKey: "id",
   },
   {
-    header: "Summary",
-    accessorKey: "summary",
-  },
-  {
-    header: "Project",
     accessorKey: "project.name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Project" />
+    ),
+    cell: ({ row }) => row.original.project.project,
   },
   {
-    header: "Status",
     accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({ row }) => {
+      const status = statuses.find(
+        (status) => status.value === row.original.status.status,
+      );
+
+      if (!status) {
+        return null;
+      }
+
+      return (
+        <div className="flex w-[100px] items-center">
+          {status.icon && (
+            <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+          )}
+          <span>{status.label}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
-    header: "Priority",
     accessorKey: "priority",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Priority" />
+    ),
+    cell: ({ row }) => {
+      const priority = priorities.find(
+        (priority) => priority.value === row.original.priority.priority,
+      );
+
+      if (!priority) {
+        return null;
+      }
+
+      return (
+        <div className="flex items-center">
+          {priority.icon && (
+            <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+          )}
+          <span>{priority.label}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
-    header: "Owner",
     accessorKey: "owner.name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Owner" />
+    ),
   },
   {
-    header: "Assigned To",
     accessorKey: "assignedTo.name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Assigned To" />
+    ),
     cell: ({ row }) => row.original.assignedTo?.name || "Unassigned",
   },
   {
-    header: "Date Raised",
     accessorKey: "dateRaised",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Date Raised" />
+    ),
     cell: ({ row }) =>
       row.original.dateRaised.toLocaleDateString("en-US", {
         month: "short",
@@ -107,8 +138,10 @@ export const columns: ColumnDef<Bug>[] = [
       }),
   },
   {
-    header: "Target Date",
     accessorKey: "targetDate",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Target Date" />
+    ),
     cell: ({ row }) =>
       row.original.targetDate?.toLocaleDateString("en-US", {
         month: "short",
@@ -116,8 +149,10 @@ export const columns: ColumnDef<Bug>[] = [
       }) || "N/A",
   },
   {
-    header: "Date Closed",
     accessorKey: "dateClosed",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Date Closed" />
+    ),
     cell: ({ row }) =>
       row.original.targetDate?.toLocaleDateString("en-US", {
         month: "short",
@@ -126,35 +161,6 @@ export const columns: ColumnDef<Bug>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const bug = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>View Details</DropdownMenuItem>
-            <DropdownMenuItem>Edit Bug</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Change Priority</DropdownMenuItem>
-            <DropdownMenuItem>Change Status</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Assign Bug</DropdownMenuItem>
-            {bug.status !== "Closed" && (
-              <DropdownMenuItem>Mark as Closed</DropdownMenuItem>
-            )}
-            {bug.status === "Closed" && (
-              <DropdownMenuItem>Reopen Bug</DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];
