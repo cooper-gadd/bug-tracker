@@ -1,6 +1,6 @@
 import { UserNav } from "@/components/user-nav";
-import { DataTable } from "./components/bug-table/data-table";
 import { Bug, columns } from "./components/bug-table/columns";
+import { DataTable } from "./components/bug-table/data-table";
 
 export default function App() {
   const bugs: Bug[] = [
