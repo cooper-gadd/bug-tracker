@@ -108,7 +108,21 @@ export default function App() {
           <UserNav />
         </div>
       </div>
-      <DataTable data={bugs} columns={columns} />
+      <DataTable
+        data={[
+          ...bugs,
+          ...bugs,
+          ...bugs,
+          ...bugs,
+          ...bugs,
+          ...bugs,
+          ...bugs,
+          ...bugs,
+          ...bugs,
+          ...bugs,
+        ]}
+        columns={columns}
+      />
     </div>
   );
 }
