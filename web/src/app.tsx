@@ -69,7 +69,7 @@ export default function App() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
           <p className="text-muted-foreground">
-            Here&apos;s a list of your bugs for Whatever!
+            Here&apos;s a list of your bugs that need to be squashed.
           </p>
         </div>
         <div className="flex items-center space-x-2">
