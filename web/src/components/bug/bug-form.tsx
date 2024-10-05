@@ -87,6 +87,7 @@ export function BugForm() {
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
     toast("New bug has been created.");
+    form.reset();
   }
 
   return (
