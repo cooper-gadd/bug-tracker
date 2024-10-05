@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner";
 import { UserNav } from "@/components/user-nav";
 import { columns } from "./components/bug/columns";
 import { DataTable } from "./components/bug/data-table";
@@ -91,6 +92,7 @@ export default function App() {
         ]}
         columns={columns}
       />
+      <Toaster />
     </div>
   );
 }

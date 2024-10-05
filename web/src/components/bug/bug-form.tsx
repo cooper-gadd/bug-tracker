@@ -1,16 +1,15 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { format } from "date-fns";
+import { CalendarIcon, Bug } from "lucide-react";
+
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,18 +24,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Bug, CalendarIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const formSchema = z.object({
   projectId: z.number().int().positive({ message: "Project is required" }),
@@ -46,19 +49,13 @@ const formSchema = z.object({
   priorityId: z.number().int().positive({ message: "Priority is required" }),
   summary: z
     .string()
-    .max(250, { message: "Summary must be 250 characters or less" })
-    .min(1, { message: "Summary is required" }),
+    .min(1, { message: "Summary is required" })
+    .max(250, { message: "Summary must be 250 characters or less" }),
   description: z
     .string()
-    .max(2500, { message: "Description must be 2500 characters or less" })
-    .min(1, { message: "Description is required" }),
-  fixDescription: z
-    .string()
-    .max(2500, { message: "Fix description must be 2500 characters or less" })
-    .nullable(),
-  dateRaised: z.date({ required_error: "Date raised is required" }),
+    .min(1, { message: "Description is required" })
+    .max(2500, { message: "Description must be 2500 characters or less" }),
   targetDate: z.date().nullable(),
-  dateClosed: z.date().nullable(),
 });
 
 export function BugForm() {
@@ -66,21 +63,19 @@ export function BugForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       projectId: undefined,
-      ownerId: undefined,
+      ownerId: 1, // Assuming the current user is the owner
       assignedToId: null,
-      statusId: undefined,
-      priorityId: undefined,
+      statusId: 1, // Assuming 1 is "Unassigned"
+      priorityId: 2, // Assuming 2 is "Medium"
       summary: "",
       description: "",
-      fixDescription: null,
-      dateRaised: new Date(),
       targetDate: null,
-      dateClosed: null,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    console.log(data);
+    toast("New bug has been created.");
   }
 
   return (
@@ -92,15 +87,14 @@ export function BugForm() {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>New Bug</DialogTitle>
+          <DialogDescription>
+            Enter the details for the new bug.
+          </DialogDescription>
+        </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <DialogHeader>
-              <DialogTitle>New Bug</DialogTitle>
-              <DialogDescription>
-                Enter the details for the new bug.
-              </DialogDescription>
-            </DialogHeader>
-
             <FormField
               control={form.control}
               name="projectId"
@@ -109,7 +103,7 @@ export function BugForm() {
                   <FormLabel>Project</FormLabel>
                   <Select
                     onValueChange={(value) => field.onChange(Number(value))}
-                    defaultValue={field.value?.toString()}
+                    value={field.value?.toString()}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -117,7 +111,6 @@ export function BugForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {/* Add project options here */}
                       <SelectItem value="1">Project 1</SelectItem>
                       <SelectItem value="2">Project 2</SelectItem>
                     </SelectContent>
@@ -136,6 +129,9 @@ export function BugForm() {
                   <FormControl>
                     <Input placeholder="Brief summary of the bug" {...field} />
                   </FormControl>
+                  <FormDescription>
+                    A short description of the bug (max 250 characters).
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -153,59 +149,10 @@ export function BugForm() {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="priorityId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Priority</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    defaultValue={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select priority" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1">Low</SelectItem>
-                      <SelectItem value="2">Medium</SelectItem>
-                      <SelectItem value="3">High</SelectItem>
-                      <SelectItem value="4">Urgent</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="statusId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    defaultValue={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1">Unassigned</SelectItem>
-                      <SelectItem value="2">Assigned</SelectItem>
-                      <SelectItem value="3">Closed</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormDescription>
+                    Provide a detailed description of the bug (max 2500
+                    characters).
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -221,7 +168,7 @@ export function BugForm() {
                     onValueChange={(value) =>
                       field.onChange(value ? Number(value) : null)
                     }
-                    defaultValue={field.value?.toString()}
+                    value={field.value?.toString() || ""}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -230,9 +177,39 @@ export function BugForm() {
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="null">Unassigned</SelectItem>
-                      {/* Add user options here */}
                       <SelectItem value="1">User 1</SelectItem>
                       <SelectItem value="2">User 2</SelectItem>
+                      <SelectItem value="3">User 3</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select the user to assign this bug to (optional).
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="priorityId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Priority</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select priority" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">Low</SelectItem>
+                      <SelectItem value="2">Medium</SelectItem>
+                      <SelectItem value="3">High</SelectItem>
+                      <SelectItem value="4">Urgent</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -268,7 +245,7 @@ export function BugForm() {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={field.value}
+                        selected={field.value || undefined}
                         onSelect={field.onChange}
                         disabled={(date) =>
                           date < new Date() || date < new Date("1900-01-01")
@@ -277,6 +254,9 @@ export function BugForm() {
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormDescription>
+                    The target date for resolving this bug (optional).
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
