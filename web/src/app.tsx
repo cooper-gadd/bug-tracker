@@ -1,6 +1,6 @@
 import { UserNav } from "@/components/user-nav";
-import { columns } from "./components/bug-table/columns";
-import { DataTable } from "./components/bug-table/data-table";
+import { columns } from "./components/bug/columns";
+import { DataTable } from "./components/bug/data-table";
 import { BugTable } from "./data/schema";
 
 export default function App() {
