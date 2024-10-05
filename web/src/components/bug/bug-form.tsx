@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
 import { CalendarIcon, Bug } from "lucide-react";
-
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,13 +48,22 @@ const formSchema = z.object({
   priorityId: z.number().int().positive({ message: "Priority is required" }),
   summary: z
     .string()
-    .min(1, { message: "Summary is required" })
     .max(250, { message: "Summary must be 250 characters or less" }),
   description: z
     .string()
-    .min(1, { message: "Description is required" })
     .max(2500, { message: "Description must be 2500 characters or less" }),
-  targetDate: z.date().nullable(),
+  fixDescription: z
+    .string()
+    .max(2500, { message: "Fix description must be 2500 characters or less" })
+    .nullable(),
+  dateRaised: z.date({ required_error: "Date raised is required" }),
+  targetDate: z
+    .date()
+    .nullable()
+    .refine((date) => !date || date > new Date(), {
+      message: "Target date must be in the future",
+    }),
+  dateClosed: z.date().nullable(),
 });
 
 export function BugForm() {
@@ -69,7 +77,10 @@ export function BugForm() {
       priorityId: 2, // Assuming 2 is "Medium"
       summary: "",
       description: "",
+      fixDescription: null,
+      dateRaised: new Date(),
       targetDate: null,
+      dateClosed: null,
     },
   });
 
@@ -179,12 +190,37 @@ export function BugForm() {
                       <SelectItem value="null">Unassigned</SelectItem>
                       <SelectItem value="1">User 1</SelectItem>
                       <SelectItem value="2">User 2</SelectItem>
-                      <SelectItem value="3">User 3</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>
                     Select the user to assign this bug to (optional).
                   </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="statusId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">Unassigned</SelectItem>
+                      <SelectItem value="2">Assigned</SelectItem>
+                      <SelectItem value="3">Closed</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -248,7 +284,7 @@ export function BugForm() {
                         selected={field.value || undefined}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date < new Date() || date < new Date("1900-01-01")
+                          date <= new Date() || date < new Date("1900-01-01")
                         }
                         initialFocus
                       />
