@@ -1,8 +1,7 @@
-import { Toaster } from "@/components/ui/sonner";
 import { columns } from "@/components/bug/columns";
 import { DataTable } from "@/components/bug/data-table";
-import { BugTable } from "@/data/schema";
-import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +10,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./components/ui/dropdown-menu";
-import { Button } from "./components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
+} from "@/components/ui/dropdown-menu";
+import { Toaster } from "@/components/ui/sonner";
+import { BugTable } from "@/data/schema";
+import React from "react";
 
 export default function App() {
   const [table, setTable] = React.useState("bugs");
