@@ -1,5 +1,5 @@
-import { columns } from "@/components/bugs/columns";
-import { DataTable } from "@/components/bugs/data-table";
+import { columns } from "@/components/bug/columns";
+import { DataTable } from "@/components/bug/data-table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {

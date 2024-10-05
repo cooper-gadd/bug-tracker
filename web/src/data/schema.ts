@@ -63,6 +63,14 @@ export const bugTableSchema = z.object({
   dateClosed: bugSchema.shape.dateClosed,
 });
 
+export const userDetailsTableSchema = z.object({
+  id: userDetailsSchema.shape.id,
+  username: userDetailsSchema.shape.username,
+  role: roleSchema.shape.role,
+  project: projectSchema.shape.project.nullable(),
+  name: userDetailsSchema.shape.name,
+});
+
 export type Project = z.infer<typeof projectSchema>;
 export type Role = z.infer<typeof roleSchema>;
 export type UserDetails = z.infer<typeof userDetailsSchema>;
@@ -70,3 +78,4 @@ export type BugStatus = z.infer<typeof bugStatusSchema>;
 export type Priority = z.infer<typeof prioritySchema>;
 export type Bug = z.infer<typeof bugSchema>;
 export type BugTable = z.infer<typeof bugTableSchema>;
+export type UserDetailsTable = z.infer<typeof userDetailsTableSchema>;
