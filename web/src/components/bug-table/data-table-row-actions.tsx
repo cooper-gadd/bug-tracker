@@ -11,7 +11,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { priorities, statuses } from "@/data/bug-data";
+import { priorities, statuses } from "@/data/data";
 import { bugTableSchema } from "@/data/schema";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";

@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { priorities, statuses } from "@/data/bug-data";
+import { priorities, statuses } from "@/data/data";
 import { BugTable } from "@/data/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./data-table-column-header";

@@ -6,6 +6,9 @@ import {
   CircleIcon,
   Timer,
   ZapIcon,
+  ShieldIcon,
+  UserCogIcon,
+  UserIcon,
 } from "lucide-react";
 
 export const statuses = [
@@ -46,5 +49,23 @@ export const priorities = [
     label: "Urgent",
     value: "Urgent",
     icon: ZapIcon,
+  },
+];
+
+export const roles = [
+  {
+    label: "Admin",
+    value: "Admin",
+    icon: ShieldIcon,
+  },
+  {
+    label: "Manager",
+    value: "Manager",
+    icon: UserCogIcon,
+  },
+  {
+    label: "User",
+    value: "User",
+    icon: UserIcon,
   },
 ];
