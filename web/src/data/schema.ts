@@ -48,7 +48,7 @@ export const bugSchema = z.object({
 
 //api schema
 
-export const bugTableSchema = z.object({
+export const bugsSchema = z.object({
   id: bugSchema.shape.id,
   project: projectSchema.shape.project,
   owner: userDetailsSchema.shape.name,
@@ -77,5 +77,5 @@ export type UserDetails = z.infer<typeof userDetailsSchema>;
 export type BugStatus = z.infer<typeof bugStatusSchema>;
 export type Priority = z.infer<typeof prioritySchema>;
 export type Bug = z.infer<typeof bugSchema>;
-export type BugTable = z.infer<typeof bugTableSchema>;
+export type Bugs = z.infer<typeof bugsSchema>;
 export type UserDetailsTable = z.infer<typeof userDetailsTableSchema>;

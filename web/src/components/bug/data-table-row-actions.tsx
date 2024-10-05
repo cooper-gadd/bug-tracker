@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { priorities, statuses } from "@/data/bug-data";
-import { bugTableSchema } from "@/data/schema";
+import { bugsSchema } from "@/data/schema";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 
@@ -23,7 +23,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const bug = bugTableSchema.parse(row.original);
+  const bug = bugsSchema.parse(row.original);
 
   return (
     <DropdownMenu>

@@ -12,12 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Toaster } from "@/components/ui/sonner";
-import { BugTable } from "@/data/schema";
+import { Bugs } from "@/data/schema";
 import React from "react";
 
 export default function App() {
   const [table, setTable] = React.useState("bugs");
-  const bugs: BugTable[] = [
+  const bugs: Bugs[] = [
     {
       id: 1,
       summary: "Minor UI glitch",
