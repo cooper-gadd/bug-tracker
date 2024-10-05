@@ -1,11 +1,11 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { priorities, statuses } from "@/data/bug-data";
-import { Bugs } from "@/data/schema";
+import { BugTable } from "@/data/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions.tsx";
 
-export const columns: ColumnDef<Bugs>[] = [
+export const columns: ColumnDef<BugTable>[] = [
   {
     id: "select",
     header: ({ table }) => (

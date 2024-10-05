@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-//database schema
+//database schemas
 
 export const projectSchema = z.object({
   id: z.number().int().positive(),
@@ -46,9 +46,9 @@ export const bugSchema = z.object({
   dateClosed: z.date().nullable(),
 });
 
-//api schema
+//table schemas
 
-export const bugsSchema = z.object({
+export const bugTableSchema = z.object({
   id: bugSchema.shape.id,
   project: projectSchema.shape.project,
   owner: userDetailsSchema.shape.name,
@@ -71,11 +71,13 @@ export const userDetailsTableSchema = z.object({
   name: userDetailsSchema.shape.name,
 });
 
+//type definitions
+
 export type Project = z.infer<typeof projectSchema>;
 export type Role = z.infer<typeof roleSchema>;
 export type UserDetails = z.infer<typeof userDetailsSchema>;
 export type BugStatus = z.infer<typeof bugStatusSchema>;
 export type Priority = z.infer<typeof prioritySchema>;
 export type Bug = z.infer<typeof bugSchema>;
-export type Bugs = z.infer<typeof bugsSchema>;
+export type BugTable = z.infer<typeof bugTableSchema>;
 export type UserDetailsTable = z.infer<typeof userDetailsTableSchema>;

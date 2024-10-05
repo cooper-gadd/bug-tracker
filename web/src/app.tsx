@@ -1,5 +1,5 @@
-import { columns } from "@/components/bug/columns";
-import { DataTable } from "@/components/bug/data-table";
+import { columns } from "@/components/bug-table/columns";
+import { DataTable } from "@/components/bug-table/data-table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,12 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Toaster } from "@/components/ui/sonner";
-import { Bugs } from "@/data/schema";
+import { BugTable } from "@/data/schema";
 import React from "react";
 
 export default function App() {
   const [table, setTable] = React.useState("bugs");
-  const bugs: Bugs[] = [
+  const bugs: BugTable[] = [
     {
       id: 1,
       summary: "Minor UI glitch",
