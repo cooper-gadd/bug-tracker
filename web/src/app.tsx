@@ -1,10 +1,22 @@
 import { Toaster } from "@/components/ui/sonner";
-import { UserNav } from "@/components/user-nav";
-import { columns } from "./components/bug/columns";
-import { DataTable } from "./components/bug/data-table";
-import { BugTable } from "./data/schema";
+import { columns } from "@/components/bug/columns";
+import { DataTable } from "@/components/bug/data-table";
+import { BugTable } from "@/data/schema";
+import React from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./components/ui/dropdown-menu";
+import { Button } from "./components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
 
 export default function App() {
+  const [table, setTable] = React.useState("bugs");
   const bugs: BugTable[] = [
     {
       id: 1,
@@ -70,11 +82,56 @@ export default function App() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
           <p className="text-muted-foreground">
-            Here&apos;s a list of your bugs that need to be squashed.
+            {table === "users"
+              ? "Here's a list of all the users in your system."
+              : table === "projects"
+                ? "Here's a list of all the projects in your system."
+                : "Here's a list of your bugs that need to be squashed."}
           </p>
         </div>
+        {/*
+          TODO: Add user data from context
+          TODO: Display options based on user role
+          TODO: Add logout functionality
+        */}
         <div className="flex items-center space-x-2">
-          <UserNav />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage
+                    src="https://avatar.vercel.sh/cooper"
+                    alt="@cooper"
+                  />
+                  <AvatarFallback>CG</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">Cooper</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    cooper@rit.com
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => setTable("bugs")}>
+                  Bugs
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTable("projects")}>
+                  Projects
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTable("users")}>
+                  Users
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Log out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <DataTable
