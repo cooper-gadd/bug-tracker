@@ -1,10 +1,10 @@
-import { StopwatchIcon } from "@radix-ui/react-icons";
 import {
   ArrowDownIcon,
   ArrowRightIcon,
   ArrowUpIcon,
   CheckCircleIcon,
   CircleIcon,
+  Timer,
   ZapIcon,
 } from "lucide-react";
 
@@ -17,7 +17,7 @@ export const statuses = [
   {
     value: "Assigned",
     label: "Assigned",
-    icon: StopwatchIcon,
+    icon: Timer,
   },
   {
     value: "Closed",
