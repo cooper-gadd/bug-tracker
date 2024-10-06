@@ -90,6 +90,7 @@ export function BugForm() {
     form.reset();
   }
 
+  //TODO: if admin or manager, they can assign
   return (
     <Dialog>
       <DialogTrigger asChild>
