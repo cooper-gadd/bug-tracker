@@ -18,7 +18,7 @@ import { BugTable, UserDetailsTable } from "@/data/schema";
 import React from "react";
 
 export default function App() {
-  const [table, setTable] = React.useState("bugs");
+  const [table, setTable] = React.useState("users");
   const bugs: BugTable[] = [
     {
       id: 1,

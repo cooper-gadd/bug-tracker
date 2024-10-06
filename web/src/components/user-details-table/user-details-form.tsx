@@ -1,12 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,32 +24,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { userDetailsTableSchema } from "@/data/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+const formSchema = z.object({
+  username: z.string().max(50, { message: "Username is required." }),
+  roleId: z.number().int().positive(),
+  projectId: z.number().int().positive().nullable(),
+  password: z.string().max(100, { message: "Password is required." }),
+  name: z.string().max(250, { message: "Name is required." }),
+});
 
 export function UserDetailsForm() {
-  const form = useForm<z.infer<typeof userDetailsTableSchema>>({
-    resolver: zodResolver(userDetailsTableSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
-      role: "User",
-      project: null,
+      roleId: 3,
+      projectId: null,
+      password: "",
       name: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof userDetailsTableSchema>) {
+  function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
-    toast("User details have been submitted.");
+    toast("New user has been created.");
     form.reset();
   }
 
@@ -59,7 +66,7 @@ export function UserDetailsForm() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>New User Details</DialogTitle>
+          <DialogTitle>New User</DialogTitle>
           <DialogDescription>
             Enter the details for the new user.
           </DialogDescription>
@@ -82,50 +89,13 @@ export function UserDetailsForm() {
 
             <FormField
               control={form.control}
-              name="role"
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Role</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a role" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Admin">Admin</SelectItem>
-                      <SelectItem value="Manager">Manager</SelectItem>
-                      <SelectItem value="User">User</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="project"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Project</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value || undefined}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project (optional)" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Project 1">Project 1</SelectItem>
-                      <SelectItem value="Project 2">Project 2</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Optional for Admin and Manager roles.
-                  </FormDescription>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter password" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -144,6 +114,59 @@ export function UserDetailsForm() {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="roleId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a role" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">Admin</SelectItem>
+                      <SelectItem value="2">Manager</SelectItem>
+                      <SelectItem value="3">User</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {form.watch("roleId") === 3 && (
+              <FormField
+                control={form.control}
+                name="projectId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Project</FormLabel>
+                    <Select
+                      onValueChange={(value) => field.onChange(Number(value))}
+                      value={field.value?.toString() || undefined}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a project" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="1">Project 1</SelectItem>
+                        <SelectItem value="2">Project 2</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <DialogFooter>
               <Button type="submit">Submit</Button>
