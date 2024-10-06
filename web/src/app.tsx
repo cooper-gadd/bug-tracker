@@ -1,5 +1,5 @@
-import { columns } from "@/components/bug-table/columns";
-import { DataTable } from "@/components/bug-table/data-table";
+import { columns as bugColumns } from "@/components/bug-table/columns";
+import { DataTable as BugsTable } from "@/components/bug-table/data-table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Toaster } from "@/components/ui/sonner";
-import { BugTable } from "@/data/schema";
+import { columns as userDetailsColumns } from "@/components/user-details-table/columns";
+import { DataTable as UsersTable } from "@/components/user-details-table/data-table";
+import { BugTable, UserDetailsTable } from "@/data/schema";
 import React from "react";
 
 export default function App() {
@@ -75,19 +77,85 @@ export default function App() {
       fixedDescription: null,
     },
   ];
+  const users: UserDetailsTable[] = [
+    {
+      id: 1,
+      username: "alice_johnson",
+      role: "Manager",
+      project: null,
+      name: "Alice Johnson",
+    },
+    {
+      id: 2,
+      username: "bob_smith",
+      role: "User",
+      project: "Project Alpha",
+      name: "Bob Smith",
+    },
+    {
+      id: 3,
+      username: "charlie_davis",
+      role: "User",
+      project: "Project Alpha",
+      name: "Charlie Davis",
+    },
+    {
+      id: 4,
+      username: "diana_evans",
+      role: "Manager",
+      project: null,
+      name: "Diana Evans",
+    },
+    {
+      id: 5,
+      username: "ethan_foster",
+      role: "User",
+      project: "Project Beta",
+      name: "Ethan Foster",
+    },
+    {
+      id: 6,
+      username: "frank_miller",
+      role: "Manager",
+      project: null,
+      name: "Frank Miller",
+    },
+    {
+      id: 7,
+      username: "grace_taylor",
+      role: "User",
+      project: "Project Gamma",
+      name: "Grace Taylor",
+    },
+    {
+      id: 8,
+      username: "admin_cooper",
+      role: "Admin",
+      project: null,
+      name: "Cooper",
+    },
+  ];
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
-          <p className="text-muted-foreground">
-            {table === "users"
-              ? "Here's a list of all the users in your system."
-              : table === "projects"
-                ? "Here's a list of all the projects in your system."
-                : "Here's a list of your bugs that need to be squashed."}
-          </p>
+          {table === "bugs" && (
+            <p className="text-muted-foreground">
+              Here's a list of your bugs that need to be squashed.
+            </p>
+          )}
+          {table === "projects" && (
+            <p className="text-muted-foreground">
+              Here's a list of all the projects in your system.
+            </p>
+          )}
+          {table === "users" && (
+            <p className="text-muted-foreground">
+              Here's a list of all the users in your system.
+            </p>
+          )}
         </div>
         {/*
           TODO: Add user data from context
@@ -134,21 +202,13 @@ export default function App() {
           </DropdownMenu>
         </div>
       </div>
-      <DataTable
-        data={[
-          ...bugs,
-          ...bugs,
-          ...bugs,
-          ...bugs,
-          ...bugs,
-          ...bugs,
-          ...bugs,
-          ...bugs,
-          ...bugs,
-          ...bugs,
-        ]}
-        columns={columns}
-      />
+      {table === "bugs" && <BugsTable data={bugs} columns={bugColumns} />}
+      {/* {table === "projects" && (
+        <ProjectsTable data={projects} columns={projectColumns} />
+      )} */}
+      {table === "users" && (
+        <UsersTable data={users} columns={userDetailsColumns} />
+      )}
       <Toaster />
     </div>
   );
