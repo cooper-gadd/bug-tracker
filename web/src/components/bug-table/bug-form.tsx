@@ -91,6 +91,7 @@ export function BugForm() {
   }
 
   //TODO: if admin or manager, they can assign
+  //TODO: if admin or manager, they can do target date
   return (
     <Dialog>
       <DialogTrigger asChild>
