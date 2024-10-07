@@ -71,14 +71,52 @@ export function DataTableRowActions<TData>({
           <DialogTitle>{bug.summary}</DialogTitle>
           <DialogDescription>{bug.description}</DialogDescription>
         </DialogHeader>
-        {action === "info" && <p>info</p>}
-        {action === "edit" && <p>edit</p>}
-        {action === "assign" && <p>assign</p>}
-        {action === "close" && <p>close</p>}
-        <DialogFooter>
-          <Button type="submit">Confirm</Button>
-        </DialogFooter>
+        {action === "info" && <Info />}
+        {action === "edit" && <Edit />}
+        {action === "assign" && <Assign />}
+        {action === "close" && <Close />}
       </DialogContent>
     </Dialog>
+  );
+}
+
+function Info() {
+  return (
+    <>
+      <p>info</p>
+    </>
+  );
+}
+
+function Edit() {
+  return (
+    <>
+      <p>edit</p>
+      <DialogFooter>
+        <Button type="submit">Submit</Button>
+      </DialogFooter>
+    </>
+  );
+}
+
+function Assign() {
+  return (
+    <>
+      <p>assign</p>
+      <DialogFooter>
+        <Button type="submit">Submit</Button>
+      </DialogFooter>
+    </>
+  );
+}
+
+function Close() {
+  return (
+    <>
+      <p>close</p>
+      <DialogFooter>
+        <Button type="submit">Submit</Button>
+      </DialogFooter>
+    </>
   );
 }
