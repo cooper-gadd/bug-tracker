@@ -24,7 +24,7 @@ graph LR
 ```
 
 ## Technical Stack
-- Frontend: React, React Router, Axios
+- Frontend: React
 - Backend: PHP
 - Database: MySQL
 - API: RESTful
@@ -44,7 +44,6 @@ graph LR
 ## Security Measures
 - Cookies for secure authentication
 - Password hashing using bcrypt
-- CORS configuration for API security
 - Parameterized queries to prevent SQL injection
 - Input validation on both frontend and backend
 
@@ -54,6 +53,7 @@ graph LR
 - Hooks: API communication services
 
 ### Backend
+- Index: Entry point for API requests
 - Controllers: Handle API requests
 - Models: Database interactions
 
