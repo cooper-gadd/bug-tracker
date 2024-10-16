@@ -5,7 +5,7 @@ class Role
   public $id;
   public $role;
 
-  public function __construct($id = null, $role = "")
+  public function __construct(int $id, string $role)
   {
     $this->id = $id;
     $this->role = $role;

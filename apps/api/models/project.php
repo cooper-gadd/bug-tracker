@@ -5,7 +5,7 @@ class Project
   public $id;
   public $project;
 
-  public function __construct($id = null, $project = "")
+  public function __construct(int $id, string $project)
   {
     $this->id = $id;
     $this->project = $project;

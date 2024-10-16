@@ -10,12 +10,12 @@ class UserDetails
   public $name;
 
   public function __construct(
-    $id = null,
-    $username = "",
-    $roleId = null,
-    $projectId = null,
-    $password = "",
-    $name = ""
+    int $id,
+    string $username,
+    int $roleId,
+    ?int $projectId,
+    string $password,
+    string $name
   ) {
     $this->id = $id;
     $this->username = $username;

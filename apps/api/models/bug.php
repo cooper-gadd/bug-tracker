@@ -16,18 +16,18 @@ class Bug
   public $dateClosed;
 
   public function __construct(
-    $id = null,
-    $projectId = null,
-    $ownerId = null,
-    $assignedToId = null,
-    $statusId = null,
-    $priorityId = null,
-    $summary = "",
-    $description = "",
-    $fixDescription = null,
-    $dateRaised = null,
-    $targetDate = null,
-    $dateClosed = null
+    int $id,
+    int $projectId,
+    int $ownerId,
+    ?int $assignedToId,
+    int $statusId,
+    int $priorityId,
+    string $summary,
+    string $description,
+    ?string $fixDescription,
+    DateTime $dateRaised,
+    ?DateTime $targetDate,
+    ?DateTime $dateClosed
   ) {
     $this->id = $id;
     $this->projectId = $projectId;
