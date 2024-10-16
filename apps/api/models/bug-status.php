@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../db/db.php";
 
-class BugStatus
+class BugStatusModel
 {
   public $id;
   public $status;

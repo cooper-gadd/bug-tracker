@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../db/db.php";
 
-class Role
+class RoleModel
 {
   public $id;
   public $role;

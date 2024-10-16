@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../db/db.php";
 
-class Priority
+class PriorityModel
 {
   public $id;
   public $priority;
