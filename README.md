@@ -1,52 +1,70 @@
-# Bug Tracking Web Application
+# Bug Tracking System
+
+## Project Overview
+This bug tracking system is developed for my Server Programming class, featuring a React frontend and PHP backend. It efficiently manages bugs across various projects with role-based access control.
 
 ## Key Features
+- Single Page Application (SPA) with React
+- RESTful API backend in PHP
+- User Authentication with Cookies
+- Role-Based Access Control: Admin, Manager, and User roles
+- Bug Management: CRUD operations for bugs
+- Project Management: Create and manage projects (Admin and Manager)
+- User Management: Add, update, and delete users (Admin only)
+- Data Visualization: Dynamic views of bugs by project, status, and due date
+- Security: Input validation, data sanitization, and password hashing
 
-1. **User Authentication**
-  - Secure login system
-  - Role-based access control (Admin, Manager, User)
-  - Session management for persistent login
+## System Architecture Diagram
+```mermaid
+graph LR
+    A[Web App] <--> B[API]
+    B <--> C[Middleware]
+    C <--> D[Controller]
+    D <--> E[Model]
+    E <--> F[Utilities]
+    F <--> G[(Database)]
+```
 
-2. **Bug Management**
-  - Report new bugs with detailed information
-  - View and update existing bugs
-  - Assign bugs to specific users
-  - Set priority and status for each bug
-  - Track bug resolution progress
+## Technical Stack
+- Frontend: React, React Router, Axios
+- Backend: PHP
+- Database: MySQL
+- API: RESTful
+- Authentication: Cookies
 
-3. **Project Administration**
-  - Create and manage multiple projects
-  - Assign users to specific projects
-  - View bug reports by project
+## API Endpoints
+- `/api/auth` - Authentication endpoints
+- `/api/bugs` - Bug management endpoints
+- `/api/projects` - Project management endpoints
+- `/api/users` - User management endpoints
 
-4. **User Administration** (Admin only)
-  - Add new users to the system
-  - Assign roles to users
-  - Delete users with cascading updates
+## User Roles and Permissions
+- **Admin**: Full system access
+- **Manager**: Project and bug management across all projects
+- **User**: Bug entry and management within assigned project
 
-5. **Data Visualization**
-  - View all bugs by project
-  - Filter open bugs by project
-  - Track overdue bugs across projects
-  - Identify unassigned bugs
+## Security Measures
+- Cookies for secure authentication
+- Password hashing using bcrypt
+- CORS configuration for API security
+- Parameterized queries to prevent SQL injection
+- Input validation on both frontend and backend
 
-6. **Access Control**
-  - Admins: Full system access
-  - Managers: Cross-project bug and user management
-  - Users: Bug reporting and management within assigned project
+## Code Structure
+### Frontend
+- Components: Reusable React components
+- Hooks: API communication services
 
-7. **Responsive Design**
-  - User-friendly interface adaptable to various devices
+### Backend
+- Controllers: Handle API requests
+- Models: Database interactions
+- Middleware: Authentication and validation
+- Utilities: Helper functions
 
-8. **Security Features**
-  - Password hashing (SHA256 or password_hash)
-  - Input validation and sanitization
-  - Parameterized queries to prevent SQL injection
+## Development
+- Frontend: Run `bun run dev` in the frontend directory
+- Backend: Ensure your PHP server is running and pointing to the backend directory
 
-9. **Reporting Functionality**
-  - Generate reports on bug status, priority, and resolution times
-  - Export data for further analysis
-
-10. **Audit Trail**
-  - Track changes made to bugs and projects
-  - Log user actions for accountability
+## Deployment
+- Frontend: Build using `bun run build`, deploy the `build` folder
+- Backend: Deploy PHP files to a production PHP server
