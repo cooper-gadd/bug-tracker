@@ -18,10 +18,9 @@ This bug tracking system is developed for my Server Programming class, featuring
 ```mermaid
 graph LR
     A[Web App] <--> B[API]
-    B <--> C[Middleware]
-    C <--> D[Controller]
-    D <--> E[Model]
-    E <--> F[(Database)]
+    B <--> C[Controller]
+    C <--> D[Model]
+    D <--> E[(Database)]
 ```
 
 ## Technical Stack
@@ -57,8 +56,6 @@ graph LR
 ### Backend
 - Controllers: Handle API requests
 - Models: Database interactions
-- Middleware: Authentication and validation
-- Utilities: Helper functions
 
 ## Development
 - Frontend: Run `bun run dev` in the frontend directory
