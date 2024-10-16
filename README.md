@@ -21,8 +21,7 @@ graph LR
     B <--> C[Middleware]
     C <--> D[Controller]
     D <--> E[Model]
-    E <--> F[Utilities]
-    F <--> G[(Database)]
+    E <--> F[(Database)]
 ```
 
 ## Technical Stack
