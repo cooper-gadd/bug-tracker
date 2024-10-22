@@ -68,7 +68,7 @@ export function AssignForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Assign</Button>
       </form>
     </Form>
   );

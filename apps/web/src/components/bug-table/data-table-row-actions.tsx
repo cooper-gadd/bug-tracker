@@ -19,6 +19,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 import React from "react";
 import { AssignForm } from "./assign-form";
+import { CloseForm } from "./close-form";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -75,7 +76,7 @@ export function DataTableRowActions<TData>({
         {action === "info" && <Info bug={bug} />}
         {action === "edit" && <Edit />}
         {action === "assign" && <AssignForm />}
-        {action === "close" && <Close />}
+        {action === "close" && <CloseForm />}
       </DialogContent>
     </Dialog>
   );
@@ -136,17 +137,6 @@ function Edit() {
   return (
     <>
       <p>edit</p>
-      <DialogFooter>
-        <Button type="submit">Submit</Button>
-      </DialogFooter>
-    </>
-  );
-}
-
-function Close() {
-  return (
-    <>
-      <p>close</p>
       <DialogFooter>
         <Button type="submit">Submit</Button>
       </DialogFooter>
