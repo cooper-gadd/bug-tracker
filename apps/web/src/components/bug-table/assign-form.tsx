@@ -15,13 +15,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { bugTableSchema } from "@/data/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-//TODO: Pass in id of bug to assign
-export function AssignForm() {
+export function AssignForm({
+  bug,
+}: {
+  bug: ReturnType<typeof bugTableSchema.parse>;
+}) {
   const formSchema = z.object({
     assignTo: z.string({
       required_error: "Please select an assignee",
@@ -31,8 +35,7 @@ export function AssignForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      //TODO: Get assignee from bug
-      assignTo: "",
+      assignTo: bug.assignedTo ?? "",
     },
   });
 
@@ -58,7 +61,9 @@ export function AssignForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="john">john</SelectItem>
+                  <SelectItem value={bug.assignedTo || "Unassgined"}>
+                    {bug.assignedTo || "Unassgined"}
+                  </SelectItem>
                   <SelectItem value="joe">joe</SelectItem>
                   <SelectItem value="jeff">jeff</SelectItem>
                 </SelectContent>

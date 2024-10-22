@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { bugTableSchema } from "@/data/schema";
 
 const formSchema = z.object({
   fixedDescription: z.string({
@@ -21,14 +22,21 @@ const formSchema = z.object({
   }),
 });
 
-export function CloseForm() {
+export function CloseForm({
+  bug,
+}: {
+  bug: ReturnType<typeof bugTableSchema.parse>;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      fixedDescription: bug.fixedDescription || "",
+    },
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
-    toast("New bug has been created.");
+    toast("Bug has been closed.");
     form.reset();
   }
 

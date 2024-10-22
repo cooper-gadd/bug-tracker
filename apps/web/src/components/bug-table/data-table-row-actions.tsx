@@ -75,8 +75,8 @@ export function DataTableRowActions<TData>({
         </DialogHeader>
         {action === "info" && <Info bug={bug} />}
         {action === "edit" && <Edit />}
-        {action === "assign" && <AssignForm />}
-        {action === "close" && <CloseForm />}
+        {action === "assign" && <AssignForm bug={bug} />}
+        {action === "close" && <CloseForm bug={bug} />}
       </DialogContent>
     </Dialog>
   );
