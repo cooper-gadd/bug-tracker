@@ -4,7 +4,7 @@
 -- USE tracker;
 
 -- Change 'databasename' to your RIT userid before running
-USE databasename;
+USE ctg7866;
 
 DROP TABLE IF EXISTS project ;
 CREATE TABLE project
