@@ -15,6 +15,7 @@ This bug tracking system is developed for my Server Programming class, featuring
 - Security: Input validation, data sanitization, and password hashing
 
 ## System Architecture Diagram
+
 ```mermaid
 graph LR
     A[Web App] <--> B[API]
@@ -48,6 +49,7 @@ graph LR
 - Input validation on both frontend and backend
 
 ## Code Structure
+
 ### Frontend
 - Components: Reusable React components
 - Hooks: API communication services
