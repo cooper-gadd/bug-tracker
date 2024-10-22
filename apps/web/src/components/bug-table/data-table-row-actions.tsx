@@ -71,7 +71,7 @@ export function DataTableRowActions<TData>({
           <DialogTitle>{bug.summary}</DialogTitle>
           <DialogDescription>{bug.description}</DialogDescription>
         </DialogHeader>
-        {action === "info" && <Info />}
+        {action === "info" && <Info bug={bug} />}
         {action === "edit" && <Edit />}
         {action === "assign" && <Assign />}
         {action === "close" && <Close />}
@@ -80,10 +80,53 @@ export function DataTableRowActions<TData>({
   );
 }
 
-function Info() {
+function Info({ bug }: { bug: ReturnType<typeof bugTableSchema.parse> }) {
   return (
     <>
-      <p>info</p>
+      <p>
+        <strong>ID:</strong> {bug.id}
+      </p>
+      <p>
+        <strong>Project:</strong> {bug.project}
+      </p>
+      <p>
+        <strong>Owner:</strong> {bug.owner}
+      </p>
+      {bug.assignedTo && (
+        <p>
+          <strong>Assigned to:</strong> {bug.assignedTo}
+        </p>
+      )}
+      <p>
+        <strong>Status:</strong> {bug.status}
+      </p>
+      <p>
+        <strong>Priority:</strong> {bug.priority}
+      </p>
+      <p>
+        <strong>Summary:</strong> {bug.summary}
+      </p>
+      <p>
+        <strong>Description:</strong> {bug.description}
+      </p>
+      {bug.fixedDescription && (
+        <p>
+          <strong>Fixed Description:</strong> {bug.fixedDescription}
+        </p>
+      )}
+      <p>
+        <strong>Date Raised:</strong> {bug.dateRaised.toLocaleDateString()}
+      </p>
+      {bug.targetDate && (
+        <p>
+          <strong>Target Date:</strong> {bug.targetDate.toLocaleDateString()}
+        </p>
+      )}
+      {bug.dateClosed && (
+        <p>
+          <strong>Date Closed:</strong> {bug.dateClosed.toLocaleDateString()}
+        </p>
+      )}
     </>
   );
 }
