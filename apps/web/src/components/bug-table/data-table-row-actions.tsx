@@ -14,10 +14,30 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { bugTableSchema } from "@/data/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 import React from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -143,12 +163,66 @@ function Edit() {
 }
 
 function Assign() {
+  const formSchema = z.object({
+    assignTo: z.string({
+      required_error: "Please select an assignee",
+    }),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      assignTo: "",
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    console.log(data);
+    toast("Bug has been assigned.");
+    form.reset();
+  }
+
   return (
     <>
-      <p>assign</p>
-      <DialogFooter>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-2/3 space-y-6"
+        >
+          <FormField
+            control={form.control}
+            name="assignTo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Assignee</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select an assignee" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="john">john</SelectItem>
+                    <SelectItem value="joe">joe</SelectItem>
+                    <SelectItem value="jeff">jeff</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Assign the bug to a team member
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Submit</Button>
+        </form>
+      </Form>
+      {/* <DialogFooter>
         <Button type="submit">Submit</Button>
-      </DialogFooter>
+      </DialogFooter> */}
     </>
   );
 }
