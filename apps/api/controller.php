@@ -41,15 +41,12 @@ class Controller
     string $password,
     string $name
   ): void {
-    // Hash the password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-    // Prepare the SQL statement
     $sql =
       "INSERT INTO user_details (Username, RoleID, ProjectId, Password, Name) VALUES (:username, :roleId, :projectId, :password, :name)";
     $stmt = $this->db->prepare($sql);
 
-    // Execute the statement
     try {
       $stmt->execute([
         ":username" => $username,
