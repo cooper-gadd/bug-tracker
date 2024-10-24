@@ -49,6 +49,23 @@ route("/user", "POST", function () use ($controller) {
   $controller->createUser($username, $roleId, $projectId, $password, $name);
 });
 
+route("/user/{id}", "PUT", function ($userId) use ($controller) {
+  $data = json_decode(file_get_contents("php://input"), true);
+  $username = $data["Username"];
+  $roleId = $data["RoleID"];
+  $projectId = $data["ProjectId"] ?? null;
+  $password = $data["Password"];
+  $name = $data["Name"];
+  $controller->updateUser(
+    (int) $userId,
+    $username,
+    $roleId,
+    $projectId,
+    $password,
+    $name
+  );
+});
+
 route("/user/{id}", "DELETE", function ($userId) use ($controller) {
   $controller->deleteUser((int) $userId);
 });
