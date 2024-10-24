@@ -20,8 +20,7 @@ This bug tracking system is developed for my Server Programming class, featuring
 graph LR
     A[Web App] <--> B[API]
     B <--> C[Controller]
-    C <--> D[DB]
-    D <--> E[(Database)]
+    C <--> D[(Database)]
 ```
 
 ## Technical Stack

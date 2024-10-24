@@ -66,6 +66,7 @@ route("/user/{id}", "PUT", function ($userId) use ($controller) {
   );
 });
 
+//TODO: look into 403 forbidden error
 route("/user/{id}", "DELETE", function ($userId) use ($controller) {
   $controller->deleteUser((int) $userId);
 });
