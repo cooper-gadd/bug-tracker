@@ -41,17 +41,35 @@ class Controller
     echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
   }
 
-  /**
-   * @param array<int,mixed> $data
-   */
-  public function createUser(array $data): void
-  {
-    $columns = implode(", ", array_keys($data));
-    $placeholders = ":" . implode(", :", array_keys($data));
-    $sql = "INSERT INTO user_details ($columns) VALUES ($placeholders)";
+  public function createUser(
+    string $username,
+    int $roleId,
+    ?int $projectId,
+    string $password,
+    string $name
+  ): void {
+    // Hash the password
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+    // Prepare the SQL statement
+    $sql =
+      "INSERT INTO user_details (Username, RoleID, ProjectId, Password, Name) VALUES (:username, :roleId, :projectId, :password, :name)";
     $stmt = $this->db->prepare($sql);
-    $stmt->execute($data);
-    echo json_encode(["id" => $this->db->lastInsertId()]);
+
+    // Execute the statement
+    try {
+      $stmt->execute([
+        ":username" => $username,
+        ":roleId" => $roleId,
+        ":projectId" => $projectId,
+        ":password" => $hashedPassword,
+        ":name" => $name,
+      ]);
+      echo json_encode(["id" => $this->db->lastInsertId()]);
+    } catch (PDOException $e) {
+      http_response_code(500);
+      echo json_encode(["error" => $e->getMessage()]);
+    }
   }
 
   public function deleteUser(int $id): void
