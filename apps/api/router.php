@@ -1,26 +1,43 @@
 <?php
-
 require_once "controllers/users.php";
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
-$uri = $_SERVER["REQUEST_URI"];
+$requestUri = $_SERVER["REQUEST_URI"];
 
-if ($requestMethod === "GET" && $uri === "/users") {
-  UsersController::getUsers();
-}
+$usersController = new UsersController();
 
-if ($requestMethod === "GET" && preg_match("/\/users\/\d+/", $uri)) {
-  $id = explode("/", $uri)[2];
-  UsersController::getUser($id);
-}
-
-if ($requestMethod === "POST" && $uri === "/users") {
-  $data = json_decode(file_get_contents("php://input"), true);
-  UsersController::createUser($data);
-}
-
-if ($requestMethod === "DELETE" && preg_match("/\/users\/\d+/", $uri)) {
-  $id = explode("/", $uri)[2];
-  UsersController::deleteUser($id);
+if (
+  $requestUri === "/~ctg7866/ISTE341/bug-tracker/api/users" &&
+  $requestMethod === "GET"
+) {
+  $usersController->getUsers();
+} elseif (
+  $requestUri === "/~ctg7866/ISTE341/bug-tracker/api/users" &&
+  $requestMethod === "POST"
+) {
+  $usersController->createUser($_POST);
+} elseif (
+  preg_match(
+    "/\/~ctg7866\/ISTE341\/bug-tracker\/api\/users\/(\d+)/",
+    $requestUri,
+    $matches
+  ) &&
+  $requestMethod === "GET"
+) {
+  $userId = $matches[1];
+  $usersController->getUser($userId);
+} elseif (
+  preg_match(
+    "/\/~ctg7866\/ISTE341\/bug-tracker\/api\/users\/(\d+)/",
+    $requestUri,
+    $matches
+  ) &&
+  $requestMethod === "DELETE"
+) {
+  $userId = $matches[1];
+  $usersController->deleteUser($userId);
+} else {
+  http_response_code(404);
+  echo json_encode(["message" => "Endpoint not found"]);
 }
 ?>
