@@ -18,7 +18,7 @@ class DB
     }
   }
 
-  public function getConnection()
+  public function getConnection(): PDO
   {
     return $this->db;
   }
