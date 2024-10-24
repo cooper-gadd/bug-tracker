@@ -1,11 +1,9 @@
 <?php
-require_once "controllers/users.php";
+require_once "controller.php";
 
+$controller = new Controller();
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 $requestUri = $_SERVER["REQUEST_URI"];
-
-$usersController = new UsersController();
-
 $baseUri = "/~ctg7866/ISTE341/bug-tracker/api";
 
 function route(string $uriPattern, string $method, callable $callback): void
@@ -26,20 +24,26 @@ function route(string $uriPattern, string $method, callable $callback): void
   }
 }
 
-route("/users", "GET", function () use ($usersController) {
-  $usersController->getUsers();
+route("/users", "GET", function () use ($controller) {
+  $controller->getUsers();
 });
 
-route("/users", "POST", function () use ($usersController) {
-  $usersController->createUser($_POST);
+route("/users/project/{projectId}", "GET", function ($projectId) use (
+  $controller
+) {
+  $controller->getUsersByProjectId((int) $projectId);
 });
 
-route("/users/{id}", "GET", function ($userId) use ($usersController) {
-  $usersController->getUser((int) $userId);
+route("/user/{id}", "GET", function ($userId) use ($controller) {
+  $controller->getUserById((int) $userId);
 });
 
-route("/users/{id}", "DELETE", function ($userId) use ($usersController) {
-  $usersController->deleteUser((int) $userId);
+route("/user", "POST", function () use ($controller) {
+  $controller->createUser($_POST);
+});
+
+route("/user/{id}", "DELETE", function ($userId) use ($controller) {
+  $controller->deleteUser((int) $userId);
 });
 
 http_response_code(404);

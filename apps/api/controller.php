@@ -1,6 +1,6 @@
 <?php
 
-class UsersController
+class Controller
 {
   private $db;
 
@@ -25,9 +25,17 @@ class UsersController
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
 
-  public function getUser(int $id): void
+  public function getUsersByProjectId(int $projectId): void
   {
-    $sql = "SELECT * FROM user_details WHERE id = :id";
+    $sql = "SELECT * FROM user_details WHERE ProjectId = :project_id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([":project_id" => $projectId]);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+  }
+
+  public function getUserById(int $id): void
+  {
+    $sql = "SELECT * FROM user_details WHERE Id = :id";
     $stmt = $this->db->prepare($sql);
     $stmt->execute([":id" => $id]);
     echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
@@ -48,7 +56,7 @@ class UsersController
 
   public function deleteUser(int $id): void
   {
-    $sql = "DELETE FROM user_details WHERE id = :id";
+    $sql = "DELETE FROM user_details WHERE Id = :id";
     $stmt = $this->db->prepare($sql);
     $stmt->execute([":id" => $id]);
     echo json_encode(["success" => true]);
