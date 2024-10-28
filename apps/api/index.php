@@ -66,8 +66,8 @@ route("/user/{id}", "PUT", function ($userId) use ($controller) {
   );
 });
 
-//TODO: look into 403 forbidden error
-route("/user/{id}", "DELETE", function ($userId) use ($controller) {
+// RIT Solace Server does not support DELETE method
+route("/user/delete/{id}", "GET", function ($userId) use ($controller) {
   $controller->deleteUser((int) $userId);
 });
 
