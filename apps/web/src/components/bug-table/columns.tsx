@@ -46,7 +46,7 @@ export const columns: ColumnDef<BugTable>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
+          <span className="max-w-[200px] truncate font-medium">
             {row.getValue("summary")}
           </span>
         </div>
@@ -126,39 +126,6 @@ export const columns: ColumnDef<BugTable>[] = [
       <DataTableColumnHeader column={column} title="Assignee" />
     ),
     cell: ({ row }) => row.original.assignedTo || "Unassigned",
-  },
-  {
-    accessorKey: "raised",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Raised" />
-    ),
-    cell: ({ row }) =>
-      row.original.dateRaised.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-  },
-  {
-    accessorKey: "target",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Target" />
-    ),
-    cell: ({ row }) =>
-      row.original.targetDate?.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }) || "N/A",
-  },
-  {
-    accessorKey: "closed",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Closed" />
-    ),
-    cell: ({ row }) =>
-      row.original.targetDate?.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }) || "N/A",
   },
   {
     id: "actions",
