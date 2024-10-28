@@ -18,6 +18,39 @@ class Controller
     }
   }
 
+  public function getBugs(): void
+  {
+    $sql = "
+        SELECT
+          b.id,
+          p.project,
+          u1.name AS owner,
+          u2.name AS assignedTo,
+          bs.status,
+          pr.priority,
+          b.summary,
+          b.description,
+          b.fixDescription AS fixedDescription,
+          b.dateRaised,
+          b.targetDate,
+          b.dateClosed
+        FROM
+          bugs b
+        LEFT JOIN
+          project p ON b.projectId = p.id
+        LEFT JOIN
+          user_details u1 ON b.ownerId = u1.id
+        LEFT JOIN
+          user_details u2 ON b.assignedToId = u2.id
+        LEFT JOIN
+          bug_status bs ON b.statusId = bs.id
+        LEFT JOIN
+          priority pr ON b.priorityId = pr.id
+      ";
+    $stmt = $this->db->query($sql);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+  }
+
   public function getUsers(): void
   {
     $sql = "SELECT

@@ -26,6 +26,10 @@ function route(string $uriPattern, string $method, callable $callback): void
   }
 }
 
+route("/bugs", "GET", function () use ($controller) {
+  $controller->getBugs();
+});
+
 route("/users", "GET", function () use ($controller) {
   $controller->getUsers();
 });
