@@ -14,8 +14,9 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { columns as userDetailsColumns } from "@/components/user-details-table/columns";
 import { DataTable as UsersTable } from "@/components/user-details-table/data-table";
-import { BugTable, UserDetailsTable } from "@/data/schema";
+import { BugTable } from "@/data/schema";
 import React from "react";
+import { useUserDetails } from "./hooks/use-user-details";
 
 export default function App() {
   const [table, setTable] = React.useState("bugs");
@@ -77,64 +78,8 @@ export default function App() {
       fixedDescription: null,
     },
   ];
-  const users: UserDetailsTable[] = [
-    {
-      id: 1,
-      username: "alice_johnson",
-      role: "Manager",
-      project: null,
-      name: "Alice Johnson",
-    },
-    {
-      id: 2,
-      username: "bob_smith",
-      role: "User",
-      project: "Project Alpha",
-      name: "Bob Smith",
-    },
-    {
-      id: 3,
-      username: "charlie_davis",
-      role: "User",
-      project: "Project Alpha",
-      name: "Charlie Davis",
-    },
-    {
-      id: 4,
-      username: "diana_evans",
-      role: "Manager",
-      project: null,
-      name: "Diana Evans",
-    },
-    {
-      id: 5,
-      username: "ethan_foster",
-      role: "User",
-      project: "Project Beta",
-      name: "Ethan Foster",
-    },
-    {
-      id: 6,
-      username: "frank_miller",
-      role: "Manager",
-      project: null,
-      name: "Frank Miller",
-    },
-    {
-      id: 7,
-      username: "grace_taylor",
-      role: "User",
-      project: "Project Gamma",
-      name: "Grace Taylor",
-    },
-    {
-      id: 8,
-      username: "admin_cooper",
-      role: "Admin",
-      project: null,
-      name: "Cooper",
-    },
-  ];
+
+  const { data: users, isLoading, error } = useUserDetails();
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8">
@@ -207,7 +152,11 @@ export default function App() {
         <ProjectsTable data={projects} columns={projectColumns} />
       )} */}
       {table === "users" && (
-        <UsersTable data={users} columns={userDetailsColumns} />
+        <>
+          {isLoading && <p>Loading...</p>}
+          {error && <p>Error: {error.message}</p>}
+          {users && <UsersTable data={users} columns={userDetailsColumns} />}
+        </>
       )}
       <Toaster />
     </div>

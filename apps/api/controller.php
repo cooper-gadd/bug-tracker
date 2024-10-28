@@ -20,7 +20,18 @@ class Controller
 
   public function getUsers(): void
   {
-    $sql = "SELECT * FROM user_details";
+    $sql = "SELECT
+    ud.id,
+    ud.username,
+    r.role,
+    p.project,
+    ud.name
+    FROM
+    user_details ud
+    LEFT JOIN
+    role r ON ud.RoleID = r.id
+    LEFT JOIN
+    project p ON ud.ProjectId = p.id";
     $stmt = $this->db->query($sql);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }

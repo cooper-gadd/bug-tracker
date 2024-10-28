@@ -64,7 +64,7 @@ export const bugTableSchema = z.object({
 });
 
 export const userDetailsTableSchema = z.object({
-  id: userDetailsSchema.shape.id,
+  id: z.string(),
   username: userDetailsSchema.shape.username,
   role: roleSchema.shape.role,
   project: projectSchema.shape.project.nullable(),
