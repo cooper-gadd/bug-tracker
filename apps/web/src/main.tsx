@@ -10,10 +10,7 @@ createRoot(document.getElementById("root")!).render(
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <SWRConfig
         value={{
-          fetcher: (url: string) =>
-            fetch(
-              `https://solace.ist.rit.edu/~ctg7866/ISTE341/bug-tracker/api${url}`,
-            ).then((res) => res.json()),
+          fetcher: (url: string) => fetch(url).then((res) => res.json()),
         }}
       >
         <App />

@@ -13,6 +13,8 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
+import { mutate } from "swr";
+import { BASE_URL } from "@/constants";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -22,6 +24,13 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const userDetail = userDetailsTableSchema.parse(row.original);
+
+  const handleDelete = async () => {
+    await fetch(`${BASE_URL}/api/user/delete/${userDetail.id}`, {
+      method: "GET",
+    });
+    mutate(`${BASE_URL}/api/users`);
+  };
 
   return (
     <AlertDialog>
@@ -44,7 +53,7 @@ export function DataTableRowActions<TData>({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

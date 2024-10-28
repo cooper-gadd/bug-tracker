@@ -147,10 +147,31 @@ class Controller
 
   public function deleteUser(int $id): void
   {
-    $sql = "DELETE FROM user_details WHERE Id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([":id" => $id]);
-    echo json_encode(["success" => true]);
+    try {
+      $this->db->beginTransaction();
+
+      // remove from assignedToId in bugs
+      $sql = "UPDATE bugs SET assignedToId = NULL WHERE assignedToId = :id";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute([":id" => $id]);
+
+      // remove from ownerId in bugs and assign to admin
+      $sql = "UPDATE bugs SET ownerId = 6 WHERE ownerId = :id";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute([":id" => $id]);
+
+      // remove from user_details
+      $sql = "DELETE FROM user_details WHERE Id = :id";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute([":id" => $id]);
+
+      $this->db->commit();
+      echo json_encode(["success" => true]);
+    } catch (PDOException $e) {
+      $this->db->rollBack();
+      http_response_code(500);
+      echo json_encode(["error" => $e->getMessage()]);
+    }
   }
 }
 
