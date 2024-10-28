@@ -16,7 +16,7 @@ import { columns as userDetailsColumns } from "@/components/user-details-table/c
 import { DataTable as UsersTable } from "@/components/user-details-table/data-table";
 import { BugTable } from "@/data/schema";
 import React from "react";
-import { useUserDetails } from "./hooks/use-user-details";
+import { useUserDetailsTable } from "./hooks/use-user-details-table";
 
 export default function App() {
   const [table, setTable] = React.useState("bugs");
@@ -79,7 +79,7 @@ export default function App() {
     },
   ];
 
-  const { data: users, isLoading, error } = useUserDetails();
+  const { data: users, isLoading, error } = useUserDetailsTable();
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8">
