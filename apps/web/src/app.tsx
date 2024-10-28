@@ -25,7 +25,6 @@ export default function App() {
     isLoading: bugsLoading,
     error: bugsError,
   } = useBugTable();
-
   const {
     data: users,
     isLoading: usersLoading,
