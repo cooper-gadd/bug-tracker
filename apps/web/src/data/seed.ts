@@ -26,7 +26,7 @@ const userDetails: UserDetails[] = Array.from({ length: 20 }, (_, i) => ({
   username: faker.internet.userName(),
   roleId: faker.helpers.arrayElement([1, 2, 3]),
   projectId: faker.helpers.arrayElement([...projects.map((p) => p.id), null]),
-  password: faker.internet.password(), // TODO: hash
+  password: faker.internet.password(),
   name: faker.person.fullName(),
 }));
 
