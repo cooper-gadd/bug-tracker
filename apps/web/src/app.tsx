@@ -14,72 +14,23 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { columns as userDetailsColumns } from "@/components/user-details-table/columns";
 import { DataTable as UsersTable } from "@/components/user-details-table/data-table";
-import { BugTable } from "@/data/schema";
 import React from "react";
 import { useUserDetailsTable } from "./hooks/use-user-details-table";
+import { useBugTable } from "./hooks/use-bug-table";
 
 export default function App() {
   const [table, setTable] = React.useState("bugs");
-  const bugs: BugTable[] = [
-    {
-      id: 1,
-      summary: "Minor UI glitch",
-      description: "Small visual inconsistency in the dashboard",
-      project: "Project Alpha",
-      owner: "Alice Johnson",
-      assignedTo: null,
-      status: "Unassigned",
-      priority: "Low",
-      dateRaised: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-      targetDate: null,
-      dateClosed: null,
-      fixedDescription: null,
-    },
-    {
-      id: 2,
-      summary: "Performance issue in search function",
-      description: "Search results are loading slowly for large datasets",
-      project: "Project Alpha",
-      owner: "Bob Smith",
-      assignedTo: "Charlie Davis",
-      status: "Assigned",
-      priority: "Medium",
-      dateRaised: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
-      targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-      dateClosed: null,
-      fixedDescription: null,
-    },
-    {
-      id: 3,
-      summary: "Data inconsistency in reports",
-      description: "Monthly reports showing incorrect totals",
-      project: "Project Beta",
-      owner: "Diana Evans",
-      assignedTo: "Ethan Foster",
-      status: "Closed",
-      priority: "High",
-      dateRaised: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 14 days ago
-      targetDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-      dateClosed: new Date(),
-      fixedDescription: "Corrected calculation logic in reporting module",
-    },
-    {
-      id: 4,
-      summary: "Critical security vulnerability",
-      description: "Potential data breach in user authentication system",
-      project: "Project Gamma",
-      owner: "Frank Miller",
-      assignedTo: "Grace Taylor",
-      status: "Assigned",
-      priority: "Urgent",
-      dateRaised: new Date(), // Today
-      targetDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
-      dateClosed: null,
-      fixedDescription: null,
-    },
-  ];
+  const {
+    data: bugs,
+    isLoading: bugsLoading,
+    error: bugsError,
+  } = useBugTable();
 
-  const { data: users, isLoading, error } = useUserDetailsTable();
+  const {
+    data: users,
+    isLoading: usersLoading,
+    error: usersError,
+  } = useUserDetailsTable();
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8">
@@ -147,14 +98,20 @@ export default function App() {
           </DropdownMenu>
         </div>
       </div>
-      {table === "bugs" && <BugsTable data={bugs} columns={bugColumns} />}
+      {table === "bugs" && (
+        <>
+          {bugsLoading && <p>Loading...</p>}
+          {bugsError && <p>Error: {bugsError.message}</p>}
+          {bugs && <BugsTable data={bugs} columns={bugColumns} />}
+        </>
+      )}
       {/* {table === "projects" && (
         <ProjectsTable data={projects} columns={projectColumns} />
       )} */}
       {table === "users" && (
         <>
-          {isLoading && <p>Loading...</p>}
-          {error && <p>Error: {error.message}</p>}
+          {usersLoading && <p>Loading...</p>}
+          {usersError && <p>Error: {usersError.message}</p>}
           {users && <UsersTable data={users} columns={userDetailsColumns} />}
         </>
       )}

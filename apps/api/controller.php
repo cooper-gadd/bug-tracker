@@ -13,6 +13,8 @@ class Controller
         $_SERVER["DB_PASS"]
       );
       $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+      $this->db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
     } catch (PDOException $e) {
       die("Connection failed: " . $e->getMessage());
     }
