@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { BASE_URL } from "@/constants";
+import { useProjects } from "@/hooks/use-projects";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -41,6 +42,11 @@ const formSchema = z.object({
 });
 
 export function UserDetailsForm() {
+  const {
+    data: projects,
+    isLoading: projectsLoading,
+    error: projectsError,
+  } = useProjects();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -168,8 +174,25 @@ export function UserDetailsForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="1">Project 1</SelectItem>
-                        <SelectItem value="2">Project 2</SelectItem>
+                        {projectsLoading && (
+                          <SelectItem disabled value={""}>
+                            Loading...
+                          </SelectItem>
+                        )}
+                        {projectsError && (
+                          <SelectItem disabled value={""}>
+                            Error loading projects
+                          </SelectItem>
+                        )}
+                        {projects &&
+                          projects.map((project) => (
+                            <SelectItem
+                              key={project.id}
+                              value={project.id.toString()}
+                            >
+                              {project.project}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

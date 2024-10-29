@@ -38,6 +38,10 @@ route("/bugs", "GET", function () use ($controller) {
   $controller->getBugs();
 });
 
+route("/projects", "GET", function () use ($controller) {
+  $controller->getProjects();
+});
+
 route("/users", "GET", function () use ($controller) {
   $controller->getUsers();
 });
