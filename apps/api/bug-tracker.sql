@@ -39,26 +39,26 @@ CREATE TABLE user_details
  CONSTRAINT `fk_project_assigned` FOREIGN KEY (`ProjectId`) REFERENCES `project` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB;
 INSERT INTO user_details (Username, RoleID, ProjectId, Password, Name) VALUES
-('Merl.Zemlak21', 3, NULL, 't6KBSFUyiTASYMq', 'Benny Carroll'),
-('Melisa_OKeefe', 2, 3, 'F3N_76pp6HQXdbg', 'Miss Regina Sanford'),
-('Era.Lindgren35', 2, 2, 'R7kcZeqZ1hf2brt', 'Greg Labadie'),
-('Jamir_Dooley62', 3, NULL, '0K1e9f8q37rqWMk', 'Misty Bartoletti'),
-('Margaret_Romaguera', 3, 3, 'IMlz7sntmjw0DrX', 'Betty Christiansen'),
-('Keith_Rippin', 1, 4, 'F79eDHuxamLZhht', 'Jan Barrows'),
-('Anissa_Grady', 2, 5, 'L_ngLQkF9XuTxVQ', 'Clara Metz-Greenfelder'),
-('Abraham_Batz82', 2, 5, 'WOP0T7fD55qhqO3', 'Christopher Legros'),
-('Evert_Grimes', 3, 4, 'oqceCLefOGuSJGR', 'Agnes Wunsch'),
-('Althea_Gerhold', 2, 5, 'VhmS8EGvq76TIPf', 'Jeff Halvorson'),
-('Ruby30', 2, 3, 'dF1FCaZhgzyLuEa', 'June Rogahn-Jacobson'),
-('Idell.Hilll', 3, 1, '7FWhfKLlK50TdAU', 'Johnnie Welch'),
-('Cortney.Balistreri38', 3, 2, 'qB7Nrdy7AX9yVeI', 'Crystal O\'Hara'),
-('Ewell.Herman', 3, 2, '5zSC2CLnG2qjM_S', 'Verna Larson'),
-('Yasmin_Schmidt59', 2, 1, 'nWBF4DJWupytxCW', 'Ricardo Kuhic'),
-('Jason42', 1, 1, 'FnZifTCUDRu3jOG', 'Jacquelyn Jerde-Tillman'),
-('Rodger43', 1, 1, 'BGpWA4xJhiMPsFx', 'Donnie Lang'),
-('Conor.Lind10', 2, 3, 'q7lDH_MYHjJ18ye', 'Doreen Wisoky'),
-('Moriah33', 3, 1, 'jes_Wmf8yq8CwDF', 'Florence Kovacek'),
-('Edwina34', 3, NULL, 'vWHs9vcF5iOIdyq', 'Ted Bins III');
+('Merl.Zemlak21', 3, 1, 't6KBSFUyiTASYMq', 'Benny Carroll'),
+('Melisa_OKeefe', 3, 2, 'F3N_76pp6HQXdbg', 'Miss Regina Sanford'),
+('Era.Lindgren35', 3, 4, 'R7kcZeqZ1hf2brt', 'Greg Labadie'),
+('Jamir_Dooley62', 3, 5, '0K1e9f8q37rqWMk', 'Misty Bartoletti'),
+('Margaret_Romaguera', 2, NULL, 'IMlz7sntmjw0DrX', 'Betty Christiansen'),
+('Keith_Rippin', 1, NULL, 'F79eDHuxamLZhht', 'Jan Barrows'),
+('Anissa_Grady', 3, 1, 'L_ngLQkF9XuTxVQ', 'Clara Metz-Greenfelder'),
+('Abraham_Batz82', 3, 2, 'WOP0T7fD55qhqO3', 'Christopher Legros'),
+('Evert_Grimes', 3, 3, 'oqceCLefOGuSJGR', 'Agnes Wunsch'),
+('Althea_Gerhold', 3, 4, 'VhmS8EGvq76TIPf', 'Jeff Halvorson'),
+('Ruby30', 3, 5, 'dF1FCaZhgzyLuEa', 'June Rogahn-Jacobson'),
+('Idell.Hilll', 2, NULL, '7FWhfKLlK50TdAU', 'Johnnie Welch'),
+('Cortney.Balistreri38', 1, NULL, 'qB7Nrdy7AX9yVeI', 'Crystal O\'Hara'),
+('Ewell.Herman', 3, 1, '5zSC2CLnG2qjM_S', 'Verna Larson'),
+('Yasmin_Schmidt59', 3, 2, 'nWBF4DJWupytxCW', 'Ricardo Kuhic'),
+('Jason42', 3, 3, 'FnZifTCUDRu3jOG', 'Jacquelyn Jerde-Tillman'),
+('Rodger43', 3, 4, 'BGpWA4xJhiMPsFx', 'Donnie Lang'),
+('Conor.Lind10', 3, 5, 'q7lDH_MYHjJ18ye', 'Doreen Wisoky'),
+('Moriah33', 2, NULL, 'jes_Wmf8yq8CwDF', 'Florence Kovacek'),
+('Edwina34', 1, NULL, 'vWHs9vcF5iOIdyq', 'Ted Bins III');
 
 CREATE TABLE bug_status
 (
