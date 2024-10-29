@@ -24,10 +24,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { BASE_URL } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { mutate } from "swr";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -50,9 +52,17 @@ export function UserDetailsForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
-    toast("New user has been created.");
+    await fetch(`${BASE_URL}/api/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    mutate(`${BASE_URL}/api/users`);
+    toast(`${data.name} has been created.`);
     form.reset();
   }
 

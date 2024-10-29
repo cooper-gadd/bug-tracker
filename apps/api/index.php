@@ -1,6 +1,14 @@
 <?php
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
+  http_response_code(200);
+  exit();
+}
+
 require_once "controller.php";
 
 $controller = new Controller();
@@ -46,11 +54,11 @@ route("/user/{id}", "GET", function ($userId) use ($controller) {
 
 route("/user", "POST", function () use ($controller) {
   $data = json_decode(file_get_contents("php://input"), true);
-  $username = $data["Username"];
-  $roleId = $data["RoleID"];
-  $projectId = $data["ProjectId"] ?? null;
-  $password = $data["Password"];
-  $name = $data["Name"];
+  $username = $data["username"];
+  $roleId = $data["roleId"];
+  $projectId = $data["projectId"] ?? null;
+  $password = $data["password"];
+  $name = $data["name"];
   $controller->createUser($username, $roleId, $projectId, $password, $name);
 });
 
