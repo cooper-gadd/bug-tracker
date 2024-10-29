@@ -1,5 +1,3 @@
-import { columns as bugColumns } from "@/components/bug-table/columns";
-import { DataTable as BugsTable } from "@/components/bug-table/data-table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,24 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Toaster } from "@/components/ui/sonner";
-import { columns as userDetailsColumns } from "@/components/user-details-table/columns";
-import { DataTable as UsersTable } from "@/components/user-details-table/data-table";
 import React from "react";
-import { useUserDetailsTable } from "./hooks/use-user-details-table";
-import { useBugTable } from "./hooks/use-bug-table";
+import { BugTable } from "./components/bug-table/bug-table";
+import { UserDetailsTable } from "./components/user-details-table/user-details-table";
 
 export default function App() {
   const [table, setTable] = React.useState("bugs");
-  const {
-    data: bugs,
-    isLoading: bugsLoading,
-    error: bugsError,
-  } = useBugTable();
-  const {
-    data: users,
-    isLoading: usersLoading,
-    error: usersError,
-  } = useUserDetailsTable();
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8">
@@ -97,23 +83,11 @@ export default function App() {
           </DropdownMenu>
         </div>
       </div>
-      {table === "bugs" && (
-        <>
-          {bugsLoading && <p>Loading...</p>}
-          {bugsError && <p>Error: {bugsError.message}</p>}
-          {bugs && <BugsTable data={bugs} columns={bugColumns} />}
-        </>
-      )}
+      {table === "bugs" && <BugTable />}
       {/* {table === "projects" && (
         <ProjectsTable data={projects} columns={projectColumns} />
       )} */}
-      {table === "users" && (
-        <>
-          {usersLoading && <p>Loading...</p>}
-          {usersError && <p>Error: {usersError.message}</p>}
-          {users && <UsersTable data={users} columns={userDetailsColumns} />}
-        </>
-      )}
+      {table === "users" && <UserDetailsTable />}
       <Toaster />
     </div>
   );
