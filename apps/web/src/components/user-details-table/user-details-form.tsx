@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { BASE_URL } from "@/constants";
 import { useProjects } from "@/hooks/use-projects";
+import { useRoles } from "@/hooks/use-roles";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -47,6 +48,11 @@ export function UserDetailsForm() {
     isLoading: projectsLoading,
     error: projectsError,
   } = useProjects();
+  const {
+    data: roles,
+    isLoading: rolesLoading,
+    error: rolesError,
+  } = useRoles();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -147,9 +153,22 @@ export function UserDetailsForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="1">Admin</SelectItem>
-                      <SelectItem value="2">Manager</SelectItem>
-                      <SelectItem value="3">User</SelectItem>
+                      {rolesLoading && (
+                        <SelectItem disabled value={""}>
+                          Loading...
+                        </SelectItem>
+                      )}
+                      {rolesError && (
+                        <SelectItem disabled value={""}>
+                          Error loading roles
+                        </SelectItem>
+                      )}
+                      {roles &&
+                        roles.map((role) => (
+                          <SelectItem key={role.id} value={role.id.toString()}>
+                            {role.role}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

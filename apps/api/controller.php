@@ -60,6 +60,13 @@ class Controller
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
 
+  public function getRoles(): void
+  {
+    $sql = "SELECT id, role FROM role";
+    $stmt = $this->db->query($sql);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+  }
+
   public function getUsers(): void
   {
     $sql = "SELECT

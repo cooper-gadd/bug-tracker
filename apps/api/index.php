@@ -42,6 +42,10 @@ route("/projects", "GET", function () use ($controller) {
   $controller->getProjects();
 });
 
+route("/roles", "GET", function () use ($controller) {
+  $controller->getRoles();
+});
+
 route("/users", "GET", function () use ($controller) {
   $controller->getUsers();
 });
