@@ -13,6 +13,7 @@ import { Toaster } from "@/components/ui/sonner";
 import React from "react";
 import { BugTable } from "./components/bug-table/bug-table";
 import { UserDetailsTable } from "./components/user-details-table/user-details-table";
+import { ProjectTable } from "./components/project-table/project-table";
 
 export default function App() {
   const [table, setTable] = React.useState("bugs");
@@ -84,9 +85,7 @@ export default function App() {
         </div>
       </div>
       {table === "bugs" && <BugTable />}
-      {/* {table === "projects" && (
-        <ProjectsTable data={projects} columns={projectColumns} />
-      )} */}
+      {table === "projects" && <ProjectTable />}
       {table === "users" && <UserDetailsTable />}
       <Toaster />
     </div>
