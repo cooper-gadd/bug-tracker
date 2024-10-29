@@ -31,6 +31,12 @@ export const columns: ColumnDef<UserDetailsTable>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ID" />
+    ),
+  },
+  {
     accessorKey: "username",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Username" />

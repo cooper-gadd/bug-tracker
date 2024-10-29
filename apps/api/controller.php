@@ -55,7 +55,7 @@ class Controller
 
   public function getProjects(): void
   {
-    $sql = "SELECT id, project FROM project";
+    $sql = "SELECT id, project FROM project ORDER BY project";
     $stmt = $this->db->query($sql);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
@@ -75,7 +75,7 @@ class Controller
 
   public function getRoles(): void
   {
-    $sql = "SELECT id, role FROM role";
+    $sql = "SELECT id, role FROM role ORDER BY role";
     $stmt = $this->db->query($sql);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
@@ -93,14 +93,16 @@ class Controller
     LEFT JOIN
     role r ON ud.RoleID = r.id
     LEFT JOIN
-    project p ON ud.ProjectId = p.id";
+    project p ON ud.ProjectId = p.id
+    ORDER BY ud.name";
     $stmt = $this->db->query($sql);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
 
   public function getUsersByProjectId(int $projectId): void
   {
-    $sql = "SELECT * FROM user_details WHERE ProjectId = :project_id";
+    $sql =
+      "SELECT * FROM user_details WHERE ProjectId = :project_id ORDER BY name";
     $stmt = $this->db->prepare($sql);
     $stmt->execute([":project_id" => $projectId]);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
