@@ -42,6 +42,12 @@ route("/projects", "GET", function () use ($controller) {
   $controller->getProjects();
 });
 
+route("/project", "POST", function () use ($controller) {
+  $data = json_decode(file_get_contents("php://input"), true);
+  $project = $data["project"];
+  $controller->createProject($project);
+});
+
 route("/roles", "GET", function () use ($controller) {
   $controller->getRoles();
 });

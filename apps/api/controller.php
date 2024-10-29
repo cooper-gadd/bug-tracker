@@ -60,6 +60,19 @@ class Controller
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
 
+  public function createProject(string $project): void
+  {
+    $sql = "INSERT INTO project (project) VALUES (:project)";
+    $stmt = $this->db->prepare($sql);
+    try {
+      $stmt->execute([":project" => $project]);
+      echo json_encode(["id" => $this->db->lastInsertId()]);
+    } catch (PDOException $e) {
+      http_response_code(500);
+      echo json_encode(["error" => $e->getMessage()]);
+    }
+  }
+
   public function getRoles(): void
   {
     $sql = "SELECT id, role FROM role";

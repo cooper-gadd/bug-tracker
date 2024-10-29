@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Table } from "@tanstack/react-table";
+import { ProjectForm } from "./project-form";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -20,6 +21,7 @@ export function DataTableToolbar<TData>({
           className="h-8 w-[150px] lg:w-[250px]"
         />
       </div>
+      <ProjectForm />
     </div>
   );
 }
