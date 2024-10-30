@@ -26,8 +26,10 @@ class Controller
         SELECT
           b.id,
           p.project,
+          p.id AS projectId,
           u1.name AS owner,
           u2.name AS assignedTo,
+          u2.id AS assignedToId,
           bs.status,
           pr.priority,
           b.summary,
@@ -80,6 +82,23 @@ class Controller
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
 
+  public function assign(int $bugId, int $assignedToId): void
+  {
+    $sql =
+      "UPDATE bugs SET assignedToId = :assignedToId, statusId = 2 WHERE id = :bugId";
+    $stmt = $this->db->prepare($sql);
+    try {
+      $stmt->execute([
+        ":assignedToId" => $assignedToId,
+        ":bugId" => $bugId,
+      ]);
+      echo json_encode(["success" => true]);
+    } catch (PDOException $e) {
+      http_response_code(500);
+      echo json_encode(["error" => $e->getMessage()]);
+    }
+  }
+
   public function getUsers(): void
   {
     $sql = "SELECT
@@ -102,7 +121,7 @@ class Controller
   public function getUsersByProjectId(int $projectId): void
   {
     $sql =
-      "SELECT * FROM user_details WHERE ProjectId = :project_id ORDER BY name";
+      "SELECT id, name FROM user_details WHERE ProjectId = :project_id ORDER BY name";
     $stmt = $this->db->prepare($sql);
     $stmt->execute([":project_id" => $projectId]);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));

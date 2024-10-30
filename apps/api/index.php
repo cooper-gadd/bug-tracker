@@ -52,6 +52,13 @@ route("/roles", "GET", function () use ($controller) {
   $controller->getRoles();
 });
 
+route("/assign", "POST", function () use ($controller) {
+  $data = json_decode(file_get_contents("php://input"), true);
+  $bugId = $data["bugId"];
+  $assignedToId = $data["assignedToId"];
+  $controller->assign((int) $bugId, (int) $assignedToId);
+});
+
 route("/users", "GET", function () use ($controller) {
   $controller->getUsers();
 });

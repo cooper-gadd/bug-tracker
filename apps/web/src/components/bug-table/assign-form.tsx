@@ -15,10 +15,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { BASE_URL } from "@/constants";
 import { bugTableSchema } from "@/data/schema";
+import { useProjectUsers } from "@/hooks/use-project-users";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { mutate } from "swr";
 import { z } from "zod";
 
 export function AssignForm({
@@ -26,8 +29,15 @@ export function AssignForm({
 }: {
   bug: ReturnType<typeof bugTableSchema.parse>;
 }) {
+  const {
+    data: projectUsers,
+    isLoading: projectUsersLoading,
+    error: projectUsersError,
+  } = useProjectUsers({
+    projectId: bug.projectId,
+  });
   const formSchema = z.object({
-    assignTo: z.string({
+    assignToId: z.number({
       required_error: "Please select an assignee",
     }),
   });
@@ -35,13 +45,24 @@ export function AssignForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      assignTo: bug.assignedTo ?? "",
+      assignToId: bug.assignedToId ?? 0,
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
-    toast(`Bug has been assigned to ${data.assignTo}.`);
+    await fetch(`${BASE_URL}/api/assign`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        bugId: bug.id,
+        assignedToId: data.assignToId,
+      }),
+    });
+    mutate(`${BASE_URL}/api/bugs`);
+    toast(`Bug has been assigned.`);
     form.reset();
   }
 
@@ -50,22 +71,41 @@ export function AssignForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="assignTo"
+          name="assignToId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Assignee</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={(value) => field.onChange(Number(value))}
+                defaultValue={field.value.toString()}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select an assignee" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={bug.assignedTo || "Unassgined"}>
-                    {bug.assignedTo || "Unassgined"}
+                  <SelectItem value={bug.assignedToId?.toString() || "0"}>
+                    {bug.assignedTo || "Unassigned"}
                   </SelectItem>
-                  <SelectItem value="joe">joe</SelectItem>
-                  <SelectItem value="jeff">jeff</SelectItem>
+                  {projectUsersLoading && (
+                    <SelectItem disabled value="loading...">
+                      Loading...
+                    </SelectItem>
+                  )}
+                  {projectUsersError && (
+                    <SelectItem disabled value="error">
+                      Error loading assignees
+                    </SelectItem>
+                  )}
+                  {projectUsers?.map(
+                    (user) =>
+                      user.id !== bug.assignedToId && (
+                        <SelectItem key={user.id} value={user.id.toString()}>
+                          {user.name}
+                        </SelectItem>
+                      ),
+                  )}
                 </SelectContent>
               </Select>
               <FormDescription>Assign the bug to a team member</FormDescription>
