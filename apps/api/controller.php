@@ -34,7 +34,7 @@ class Controller
           pr.priority,
           b.summary,
           b.description,
-          b.fixDescription AS fixedDescription,
+          b.fixDescription AS fixDescription,
           b.dateRaised,
           b.targetDate,
           b.dateClosed
@@ -90,6 +90,23 @@ class Controller
     try {
       $stmt->execute([
         ":assignedToId" => $assignedToId,
+        ":bugId" => $bugId,
+      ]);
+      echo json_encode(["success" => true]);
+    } catch (PDOException $e) {
+      http_response_code(500);
+      echo json_encode(["error" => $e->getMessage()]);
+    }
+  }
+
+  public function close(int $bugId, string $fixDescription): void
+  {
+    $sql =
+      "UPDATE bugs SET statusId = 3, fixDescription = :fixDescription, dateClosed = now() WHERE id = :bugId";
+    $stmt = $this->db->prepare($sql);
+    try {
+      $stmt->execute([
+        ":fixDescription" => $fixDescription,
         ":bugId" => $bugId,
       ]);
       echo json_encode(["success" => true]);

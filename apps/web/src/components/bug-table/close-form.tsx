@@ -13,11 +13,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import { BASE_URL } from "@/constants";
 import { bugTableSchema } from "@/data/schema";
+import { toast } from "sonner";
+import { mutate } from "swr";
 
 const formSchema = z.object({
-  fixedDescription: z.string({
+  fixDescription: z.string({
     required_error: "Please enter a description.",
   }),
 });
@@ -30,12 +32,23 @@ export function CloseForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fixedDescription: bug.fixedDescription || "",
+      fixDescription: bug.fixDescription || "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
+    await fetch(`${BASE_URL}/api/close`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        bugId: bug.id,
+        fixDescription: data.fixDescription,
+      }),
+    });
+    mutate(`${BASE_URL}/api/bugs`);
     toast("Bug has been closed.");
     form.reset();
   }
@@ -45,7 +58,7 @@ export function CloseForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="fixedDescription"
+          name="fixDescription"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Fixed Description</FormLabel>

@@ -59,6 +59,13 @@ route("/assign", "POST", function () use ($controller) {
   $controller->assign((int) $bugId, (int) $assignedToId);
 });
 
+route("/close", "POST", function () use ($controller) {
+  $data = json_decode(file_get_contents("php://input"), true);
+  $bugId = $data["bugId"];
+  $fixDescription = $data["fixDescription"];
+  $controller->close((int) $bugId, $fixDescription);
+});
+
 route("/users", "GET", function () use ($controller) {
   $controller->getUsers();
 });

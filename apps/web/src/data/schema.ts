@@ -59,7 +59,7 @@ export const bugTableSchema = z.object({
   priority: prioritySchema.shape.priority,
   summary: bugSchema.shape.summary,
   description: bugSchema.shape.description,
-  fixedDescription: bugSchema.shape.fixDescription,
+  fixDescription: bugSchema.shape.fixDescription,
   dateRaised: bugSchema.shape.dateRaised,
   targetDate: bugSchema.shape.targetDate,
   dateClosed: bugSchema.shape.dateClosed,

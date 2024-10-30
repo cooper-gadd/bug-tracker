@@ -111,9 +111,9 @@ function Info({ bug }: { bug: ReturnType<typeof bugTableSchema.parse> }) {
       <p>
         <strong>Description:</strong> {bug.description}
       </p>
-      {bug.fixedDescription && (
+      {bug.fixDescription && (
         <p>
-          <strong>Fixed Description:</strong> {bug.fixedDescription}
+          <strong>Fix Description:</strong> {bug.fixDescription}
         </p>
       )}
       <p>
