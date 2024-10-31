@@ -1,14 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { DialogFooter } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -39,7 +31,7 @@ import { useProjects } from "@/hooks/use-projects";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { Bug, CalendarIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { mutate } from "swr";
@@ -119,229 +111,210 @@ export function EditForm({
   //TODO: if admin or manager, they can assign
   //TODO: if admin or manager, they can do target date
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="ml-auto h-8 flex">
-          <Bug className="mr-2 h-4 w-4" />
-          New Bug
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>New Bug</DialogTitle>
-          <DialogDescription>
-            Enter the details for the new bug.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="projectId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Project</FormLabel>
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(Number(value));
-                      mutate(
-                        `${BASE_URL}/api/users/project/${value.toString()}`,
-                      );
-                    }}
-                    value={field.value?.toString() || undefined}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {projectsLoading && (
-                        <SelectItem disabled value="loading">
-                          Loading...
-                        </SelectItem>
-                      )}
-                      {projectsError && (
-                        <SelectItem disabled value="error">
-                          Error loading projects
-                        </SelectItem>
-                      )}
-                      {projects &&
-                        projects.map((project) => (
-                          <SelectItem
-                            key={project.id}
-                            value={project.id.toString()}
-                          >
-                            {project.project}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="projectId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Project</FormLabel>
+              <Select
+                onValueChange={(value) => {
+                  field.onChange(Number(value));
+                  mutate(`${BASE_URL}/api/users/project/${value.toString()}`);
+                }}
+                value={field.value?.toString() || undefined}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a project" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {projectsLoading && (
+                    <SelectItem disabled value="loading">
+                      Loading...
+                    </SelectItem>
+                  )}
+                  {projectsError && (
+                    <SelectItem disabled value="error">
+                      Error loading projects
+                    </SelectItem>
+                  )}
+                  {projects &&
+                    projects.map((project) => (
+                      <SelectItem
+                        key={project.id}
+                        value={project.id.toString()}
+                      >
+                        {project.project}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              control={form.control}
-              name="summary"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Summary</FormLabel>
+        <FormField
+          control={form.control}
+          name="summary"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Summary</FormLabel>
+              <FormControl>
+                <Input placeholder="Brief summary of the bug" {...field} />
+              </FormControl>
+              <FormDescription>
+                A short description of the bug (max 250 characters).
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Detailed description of the bug"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>
+                Provide a detailed description of the bug (max 2500 characters).
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="assignedToId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Assigned To</FormLabel>
+              <Select
+                onValueChange={(value) =>
+                  field.onChange(value ? Number(value) : null)
+                }
+                value={field.value?.toString() || ""}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select assignee" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {projectUsersLoading && (
+                    <SelectItem disabled value="loading">
+                      Loading...
+                    </SelectItem>
+                  )}
+                  {projectUsersError && (
+                    <SelectItem disabled value="error">
+                      Error loading users
+                    </SelectItem>
+                  )}
+                  {projectUsers &&
+                    projectUsers.map((user) => (
+                      <SelectItem key={user.id} value={user.id.toString()}>
+                        {user.name}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Select the user to assign this bug to (optional).
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="priorityId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Priority</FormLabel>
+              <Select
+                onValueChange={(value) => field.onChange(Number(value))}
+                value={field.value?.toString()}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="1">Low</SelectItem>
+                  <SelectItem value="2">Medium</SelectItem>
+                  <SelectItem value="3">High</SelectItem>
+                  <SelectItem value="4">Urgent</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="targetDate"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Target Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
                   <FormControl>
-                    <Input placeholder="Brief summary of the bug" {...field} />
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "text-left font-normal",
+                        !field.value && "text-muted-foreground",
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
                   </FormControl>
-                  <FormDescription>
-                    A short description of the bug (max 250 characters).
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Detailed description of the bug"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Provide a detailed description of the bug (max 2500
-                    characters).
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="assignedToId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Assigned To</FormLabel>
-                  <Select
-                    onValueChange={(value) =>
-                      field.onChange(value ? Number(value) : null)
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value || undefined}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date <= new Date() || date < new Date("1900-01-01")
                     }
-                    value={field.value?.toString() || ""}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select assignee" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {projectUsersLoading && (
-                        <SelectItem disabled value="loading">
-                          Loading...
-                        </SelectItem>
-                      )}
-                      {projectUsersError && (
-                        <SelectItem disabled value="error">
-                          Error loading users
-                        </SelectItem>
-                      )}
-                      {projectUsers &&
-                        projectUsers.map((user) => (
-                          <SelectItem key={user.id} value={user.id.toString()}>
-                            {user.name}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Select the user to assign this bug to (optional).
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                The target date for resolving this bug (optional).
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              control={form.control}
-              name="priorityId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Priority</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select priority" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1">Low</SelectItem>
-                      <SelectItem value="2">Medium</SelectItem>
-                      <SelectItem value="3">High</SelectItem>
-                      <SelectItem value="4">Urgent</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="targetDate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Target Date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value || undefined}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date <= new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormDescription>
-                    The target date for resolving this bug (optional).
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <DialogFooter>
-              <Button type="submit">Submit</Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+        <DialogFooter>
+          <Button type="submit">Submit</Button>
+        </DialogFooter>
+      </form>
+    </Form>
   );
 }

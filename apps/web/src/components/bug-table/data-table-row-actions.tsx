@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -20,6 +19,7 @@ import { Row } from "@tanstack/react-table";
 import React from "react";
 import { AssignForm } from "./assign-form";
 import { CloseForm } from "./close-form";
+import { EditForm } from "./edit-form";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -74,7 +74,7 @@ export function DataTableRowActions<TData>({
           <DialogDescription>{bug.description}</DialogDescription>
         </DialogHeader>
         {action === "info" && <Info bug={bug} />}
-        {action === "edit" && <Edit />}
+        {action === "edit" && <EditForm bug={bug} />}
         {action === "assign" && <AssignForm bug={bug} />}
         {action === "close" && <CloseForm bug={bug} />}
       </DialogContent>
@@ -129,17 +129,6 @@ function Info({ bug }: { bug: ReturnType<typeof bugTableSchema.parse> }) {
           <strong>Date Closed:</strong> {bug.dateClosed.toLocaleDateString()}
         </p>
       )}
-    </>
-  );
-}
-
-function Edit() {
-  return (
-    <>
-      <p>edit</p>
-      <DialogFooter>
-        <Button type="submit">Submit</Button>
-      </DialogFooter>
     </>
   );
 }
