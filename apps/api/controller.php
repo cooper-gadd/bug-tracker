@@ -320,7 +320,7 @@ class Controller
       $stmt->execute([":id" => $id]);
 
       // remove from ownerId in bugs and assign to admin
-      $sql = "UPDATE bugs SET ownerId = 6 WHERE ownerId = :id";
+      $sql = "UPDATE bugs SET ownerId = 10 WHERE ownerId = :id";
       $stmt = $this->db->prepare($sql);
       $stmt->execute([":id" => $id]);
 
