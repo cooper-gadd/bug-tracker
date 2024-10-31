@@ -97,7 +97,7 @@ export function EditForm({
     data.statusId = data.assignedToId && !data.dateClosed ? 2 : 1;
     console.log(data);
     await fetch(`${BASE_URL}/api/bug/${bug.id}`, {
-      method: "Put",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
