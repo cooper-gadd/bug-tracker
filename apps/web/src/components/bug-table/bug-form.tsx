@@ -12,7 +12,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -181,9 +180,6 @@ export function BugForm() {
                   <FormControl>
                     <Input placeholder="Brief summary of the bug" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    A short description of the bug (max 250 characters).
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -201,10 +197,6 @@ export function BugForm() {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Provide a detailed description of the bug (max 2500
-                    characters).
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -246,9 +238,6 @@ export function BugForm() {
                         ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    Select the user to assign this bug to (optional).
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -318,9 +307,6 @@ export function BugForm() {
                       />
                     </PopoverContent>
                   </Popover>
-                  <FormDescription>
-                    The target date for resolving this bug (optional).
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

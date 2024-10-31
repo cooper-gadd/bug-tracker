@@ -4,7 +4,6 @@ import { DialogFooter } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -167,9 +166,6 @@ export function EditForm({
               <FormControl>
                 <Input placeholder="Brief summary of the bug" {...field} />
               </FormControl>
-              <FormDescription>
-                A short description of the bug (max 250 characters).
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -187,9 +183,6 @@ export function EditForm({
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                Provide a detailed description of the bug (max 2500 characters).
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -231,9 +224,6 @@ export function EditForm({
                     ))}
                 </SelectContent>
               </Select>
-              <FormDescription>
-                Select the user to assign this bug to (optional).
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -303,9 +293,66 @@ export function EditForm({
                   />
                 </PopoverContent>
               </Popover>
-              <FormDescription>
-                The target date for resolving this bug (optional).
-              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="fixDescription"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Fix Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Detailed fix description of the bug"
+                  {...field}
+                  value={field.value || ""}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="dateClosed"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date Closed</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "text-left font-normal",
+                        !field.value && "text-muted-foreground",
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value || undefined}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date <= new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}

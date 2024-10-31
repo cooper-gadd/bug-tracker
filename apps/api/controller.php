@@ -94,14 +94,14 @@ class Controller
   public function updateBug(
     int $id,
     int $projectId,
-    int $priorityId,
+    int $priorityId, //need
     int $statusId,
     string $summary,
     string $description,
     ?string $assignedToId,
     ?string $targetDate,
-    ?string $fixDescription,
-    ?string $dateClosed
+    ?string $fixDescription, //need
+    ?string $dateClosed //need
   ): void {
     if ($targetDate !== null) {
       $targetDate = date("Y-m-d H:i:s", strtotime($targetDate));
