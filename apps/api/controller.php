@@ -100,8 +100,8 @@ class Controller
     string $description,
     ?string $assignedToId,
     ?string $targetDate,
-    ?string $fixDescription, //need
-    ?string $dateClosed //need
+    ?string $fixDescription,
+    ?string $dateClosed
   ): void {
     if ($targetDate !== null) {
       $targetDate = date("Y-m-d H:i:s", strtotime($targetDate));
