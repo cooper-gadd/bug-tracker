@@ -63,7 +63,7 @@ class Controller
     string $summary,
     string $description,
     ?string $assignedToId,
-    string $targetDate
+    ?string $targetDate
   ): void {
     $sql =
       "INSERT INTO bugs (projectId, ownerId, priorityId, summary, description, assignedToId, targetDate) VALUES (:projectId, :ownerId, :priorityId, :summary, :description, :assignedToId, :targetDate)";

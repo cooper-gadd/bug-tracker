@@ -46,7 +46,7 @@ route("/bug", "POST", function () use ($controller) {
   $summary = $data["summary"];
   $description = $data["description"];
   $assignedToId = $data["assignedToId"] ?? null;
-  $targetDate = $data["targetDate"];
+  $targetDate = $data["targetDate"] ?? null;
   $controller->createBug(
     (int) $projectId,
     (int) $ownerId,
