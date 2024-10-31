@@ -56,18 +56,12 @@ const formSchema = z.object({
   description: z
     .string()
     .max(2500, { message: "Description must be 2500 characters or less" }),
-  fixDescription: z
-    .string()
-    .max(2500, { message: "Fix description must be 2500 characters or less" })
-    .nullable(),
-  dateRaised: z.date({ required_error: "Date raised is required" }),
   targetDate: z
     .date()
     .nullable()
     .refine((date) => !date || date > new Date(), {
       message: "Target date must be in the future",
     }),
-  dateClosed: z.date().nullable(),
 });
 
 export function BugForm() {
@@ -81,10 +75,7 @@ export function BugForm() {
       priorityId: 2, // Assuming 2 is "Medium"
       summary: "",
       description: "",
-      fixDescription: null,
-      dateRaised: new Date(),
       targetDate: null,
-      dateClosed: null,
     },
   });
   const {
@@ -101,8 +92,9 @@ export function BugForm() {
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
+    data.statusId = data.assignedToId ? 2 : 1;
     console.log(data);
-    toast("New bug has been created.");
+    toast(`Bug "${data.summary}" created`);
     form.reset();
   }
 
