@@ -91,6 +91,63 @@ class Controller
     }
   }
 
+  public function updateBug(
+    int $id,
+    int $projectId,
+    int $ownerId,
+    int $priorityId,
+    int $statusId,
+    string $summary,
+    string $description,
+    ?string $assignedToId,
+    ?string $targetDate,
+    ?string $fixDescription,
+    ?string $dateClosed
+  ): void {
+    if ($targetDate !== null) {
+      $targetDate = date("Y-m-d H:i:s", strtotime($targetDate));
+    }
+    if ($dateClosed !== null) {
+      $dateClosed = date("Y-m-d H:i:s", strtotime($dateClosed));
+    }
+
+    $sql = "
+      UPDATE bugs
+      SET
+        projectId = :projectId,
+        ownerId = :ownerId,
+        priorityId = :priorityId,
+        statusId = :statusId,
+        summary = :summary,
+        description = :description,
+        assignedToId = :assignedToId,
+        targetDate = :targetDate,
+        fixDescription = :fixDescription,
+        dateClosed = :dateClosed
+      WHERE id = :id";
+    $stmt = $this->db->prepare($sql);
+
+    try {
+      $stmt->execute([
+        ":id" => $id,
+        ":projectId" => $projectId,
+        ":ownerId" => $ownerId,
+        ":priorityId" => $priorityId,
+        ":statusId" => $statusId,
+        ":summary" => $summary,
+        ":description" => $description,
+        ":assignedToId" => $assignedToId,
+        ":targetDate" => $targetDate,
+        ":fixDescription" => $fixDescription,
+        ":dateClosed" => $dateClosed,
+      ]);
+      echo json_encode(["success" => true]);
+    } catch (PDOException $e) {
+      http_response_code(500);
+      echo json_encode(["error" => $e->getMessage()]);
+    }
+  }
+
   public function getProjects(): void
   {
     $sql = "SELECT id, project FROM project ORDER BY project";
