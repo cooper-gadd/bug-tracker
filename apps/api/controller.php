@@ -94,7 +94,7 @@ class Controller
   public function updateBug(
     int $id,
     int $projectId,
-    int $priorityId, //need
+    int $priorityId,
     int $statusId,
     string $summary,
     string $description,

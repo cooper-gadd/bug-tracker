@@ -25,6 +25,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { BASE_URL } from "@/constants";
 import { bugTableSchema } from "@/data/schema";
+import { usePriorities } from "@/hooks/use-priorities";
 import { useProjectUsers } from "@/hooks/use-project-users";
 import { useProjects } from "@/hooks/use-projects";
 import { cn } from "@/lib/utils";
@@ -91,6 +92,11 @@ export function EditForm({
   } = useProjectUsers({
     projectId: form.watch("projectId"),
   });
+  const {
+    data: priorities,
+    isLoading: prioritiesLoading,
+    error: prioritiesError,
+  } = usePriorities();
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     data.statusId = data.assignedToId && !data.dateClosed ? 2 : 1;
@@ -245,10 +251,25 @@ export function EditForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="1">Low</SelectItem>
-                  <SelectItem value="2">Medium</SelectItem>
-                  <SelectItem value="3">High</SelectItem>
-                  <SelectItem value="4">Urgent</SelectItem>
+                  {prioritiesLoading && (
+                    <SelectItem disabled value="loading">
+                      Loading...
+                    </SelectItem>
+                  )}
+                  {prioritiesError && (
+                    <SelectItem disabled value="error">
+                      Error loading priorities
+                    </SelectItem>
+                  )}
+                  {priorities &&
+                    priorities.map((priority) => (
+                      <SelectItem
+                        key={priority.id}
+                        value={priority.id.toString()}
+                      >
+                        {priority.priority}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormMessage />
