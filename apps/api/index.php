@@ -38,6 +38,26 @@ route("/bugs", "GET", function () use ($controller) {
   $controller->getBugs();
 });
 
+route("/bug", "POST", function () use ($controller) {
+  $data = json_decode(file_get_contents("php://input"), true);
+  $projectId = $data["projectId"];
+  $ownerId = $data["ownerId"];
+  $priorityId = $data["priorityId"];
+  $summary = $data["summary"];
+  $description = $data["description"];
+  $assignedToId = $data["assignedToId"] ?? null;
+  $targetDate = $data["targetDate"];
+  $controller->createBug(
+    (int) $projectId,
+    (int) $ownerId,
+    (int) $priorityId,
+    $summary,
+    $description,
+    $assignedToId,
+    $targetDate
+  );
+});
+
 route("/projects", "GET", function () use ($controller) {
   $controller->getProjects();
 });

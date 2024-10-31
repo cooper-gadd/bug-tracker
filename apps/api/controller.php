@@ -56,6 +56,35 @@ class Controller
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
 
+  public function createBug(
+    int $projectId,
+    int $ownerId,
+    int $priorityId,
+    string $summary,
+    string $description,
+    ?string $assignedToId,
+    string $targetDate
+  ): void {
+    $sql =
+      "INSERT INTO bugs (projectId, ownerId, priorityId, summary, description, assignedToId, targetDate) VALUES (:projectId, :ownerId, :priorityId, :summary, :description, :assignedToId, :targetDate)";
+    $stmt = $this->db->prepare($sql);
+    try {
+      $stmt->execute([
+        ":projectId" => $projectId,
+        ":ownerId" => $ownerId,
+        ":priorityId" => $priorityId,
+        ":summary" => $summary,
+        ":description" => $description,
+        ":assignedToId" => $assignedToId,
+        ":targetDate" => $targetDate,
+      ]);
+      echo json_encode(["id" => $this->db->lastInsertId()]);
+    } catch (PDOException $e) {
+      http_response_code(500);
+      echo json_encode(["error" => $e->getMessage()]);
+    }
+  }
+
   public function getProjects(): void
   {
     $sql = "SELECT id, project FROM project ORDER BY project";
