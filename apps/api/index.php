@@ -70,6 +70,7 @@ route("/bug/{id}", "PUT", function ($bugId) use ($controller) {
   $assignedToId = $data["assignedToId"] ?? null;
   $targetDate = $data["targetDate"] ?? null;
   $fixDescription = $data["fixDescription"] ?? null;
+  $dateClosed = $data["dateClosed"] ?? null;
   $controller->updateBug(
     (int) $bugId,
     (int) $projectId,
@@ -79,7 +80,8 @@ route("/bug/{id}", "PUT", function ($bugId) use ($controller) {
     $description,
     $assignedToId,
     $targetDate,
-    $fixDescription
+    $fixDescription,
+    $dateClosed
   );
 });
 

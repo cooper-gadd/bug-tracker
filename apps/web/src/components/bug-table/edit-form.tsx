@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { DialogFooter } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -39,7 +38,6 @@ import { z } from "zod";
 
 const formSchema = z.object({
   projectId: z.number().int().positive({ message: "Project is required" }),
-  ownerId: z.number().int().positive({ message: "Owner is required" }),
   assignedToId: z.number().int().positive().nullable(),
   statusId: z.number().int().positive({ message: "Status is required" }),
   priorityId: z.number().int().positive({ message: "Priority is required" }),
@@ -71,8 +69,9 @@ export function EditForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       projectId: bug.projectId,
+      statusId: bug.statusId,
       assignedToId: bug.assignedToId,
-      priorityId: 2,
+      priorityId: bug.priorityId,
       summary: bug.summary,
       description: bug.description,
       fixDescription: bug.fixDescription,
@@ -378,10 +377,7 @@ export function EditForm({
             </FormItem>
           )}
         />
-
-        <DialogFooter>
-          <Button type="submit">Submit</Button>
-        </DialogFooter>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
