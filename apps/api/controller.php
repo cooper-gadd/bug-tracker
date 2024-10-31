@@ -94,7 +94,6 @@ class Controller
   public function updateBug(
     int $id,
     int $projectId,
-    int $ownerId,
     int $priorityId,
     int $statusId,
     string $summary,
@@ -115,7 +114,6 @@ class Controller
       UPDATE bugs
       SET
         projectId = :projectId,
-        ownerId = :ownerId,
         priorityId = :priorityId,
         statusId = :statusId,
         summary = :summary,
@@ -131,7 +129,6 @@ class Controller
       $stmt->execute([
         ":id" => $id,
         ":projectId" => $projectId,
-        ":ownerId" => $ownerId,
         ":priorityId" => $priorityId,
         ":statusId" => $statusId,
         ":summary" => $summary,

@@ -63,7 +63,6 @@ route("/bug", "POST", function () use ($controller) {
 route("/bug/{id}", "PUT", function ($bugId) use ($controller) {
   $data = json_decode(file_get_contents("php://input"), true);
   $projectId = $data["projectId"];
-  $ownerId = $data["ownerId"];
   $priorityId = $data["priorityId"];
   $statusId = $data["statusId"];
   $summary = $data["summary"];
@@ -74,7 +73,6 @@ route("/bug/{id}", "PUT", function ($bugId) use ($controller) {
   $controller->updateBug(
     (int) $bugId,
     (int) $projectId,
-    (int) $ownerId,
     (int) $priorityId,
     (int) $statusId,
     $summary,
