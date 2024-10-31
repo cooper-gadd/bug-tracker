@@ -39,6 +39,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useProjects } from "@/hooks/use-projects";
 
 const formSchema = z.object({
   projectId: z.number().int().positive({ message: "Project is required" }),
@@ -83,6 +84,11 @@ export function BugForm() {
       dateClosed: null,
     },
   });
+  const {
+    data: projects,
+    isLoading: projectsLoading,
+    error: projectsError,
+  } = useProjects();
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
@@ -117,7 +123,7 @@ export function BugForm() {
                   <FormLabel>Project</FormLabel>
                   <Select
                     onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
+                    value={field.value?.toString() || undefined}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -125,8 +131,25 @@ export function BugForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="1">Project 1</SelectItem>
-                      <SelectItem value="2">Project 2</SelectItem>
+                      {projectsLoading && (
+                        <SelectItem disabled value={""}>
+                          Loading...
+                        </SelectItem>
+                      )}
+                      {projectsError && (
+                        <SelectItem disabled value={""}>
+                          Error loading projects
+                        </SelectItem>
+                      )}
+                      {projects &&
+                        projects.map((project) => (
+                          <SelectItem
+                            key={project.id}
+                            value={project.id.toString()}
+                          >
+                            {project.project}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
