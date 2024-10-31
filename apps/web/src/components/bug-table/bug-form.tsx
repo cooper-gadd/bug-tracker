@@ -1,10 +1,14 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { format } from "date-fns";
-import { CalendarIcon, Bug } from "lucide-react";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -15,7 +19,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -23,23 +31,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { BASE_URL } from "@/constants";
+import { useProjectUsers } from "@/hooks/use-project-users";
 import { useProjects } from "@/hooks/use-projects";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { Bug, CalendarIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { mutate } from "swr";
+import { z } from "zod";
 
 const formSchema = z.object({
   projectId: z.number().int().positive({ message: "Project is required" }),
@@ -89,6 +92,13 @@ export function BugForm() {
     isLoading: projectsLoading,
     error: projectsError,
   } = useProjects();
+  const {
+    data: projectUsers,
+    isLoading: projectUsersLoading,
+    error: projectUsersError,
+  } = useProjectUsers({
+    projectId: form.watch("projectId"),
+  });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
@@ -122,7 +132,12 @@ export function BugForm() {
                 <FormItem>
                   <FormLabel>Project</FormLabel>
                   <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
+                    onValueChange={(value) => {
+                      field.onChange(Number(value));
+                      mutate(
+                        `${BASE_URL}/api/users/project/${value.toString()}`,
+                      );
+                    }}
                     value={field.value?.toString() || undefined}
                   >
                     <FormControl>
@@ -132,12 +147,12 @@ export function BugForm() {
                     </FormControl>
                     <SelectContent>
                       {projectsLoading && (
-                        <SelectItem disabled value={""}>
+                        <SelectItem disabled value="loading">
                           Loading...
                         </SelectItem>
                       )}
                       {projectsError && (
-                        <SelectItem disabled value={""}>
+                        <SelectItem disabled value="error">
                           Error loading projects
                         </SelectItem>
                       )}
@@ -213,40 +228,27 @@ export function BugForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="null">Unassigned</SelectItem>
-                      <SelectItem value="1">User 1</SelectItem>
-                      <SelectItem value="2">User 2</SelectItem>
+                      {projectUsersLoading && (
+                        <SelectItem disabled value="loading">
+                          Loading...
+                        </SelectItem>
+                      )}
+                      {projectUsersError && (
+                        <SelectItem disabled value="error">
+                          Error loading users
+                        </SelectItem>
+                      )}
+                      {projectUsers &&
+                        projectUsers.map((user) => (
+                          <SelectItem key={user.id} value={user.id.toString()}>
+                            {user.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <FormDescription>
                     Select the user to assign this bug to (optional).
                   </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="statusId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1">Unassigned</SelectItem>
-                      <SelectItem value="2">Assigned</SelectItem>
-                      <SelectItem value="3">Closed</SelectItem>
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
