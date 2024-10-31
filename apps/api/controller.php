@@ -172,6 +172,13 @@ class Controller
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
 
+  public function getPriorities(): void
+  {
+    $sql = "SELECT id, priority FROM priority ORDER BY priority";
+    $stmt = $this->db->query($sql);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+  }
+
   public function assign(int $bugId, int $assignedToId): void
   {
     $sql =

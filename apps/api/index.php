@@ -1,7 +1,7 @@
 <?php
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
@@ -95,6 +95,10 @@ route("/project", "POST", function () use ($controller) {
 
 route("/roles", "GET", function () use ($controller) {
   $controller->getRoles();
+});
+
+route("/priorities", "GET", function () use ($controller) {
+  $controller->getPriorities();
 });
 
 route("/assign", "POST", function () use ($controller) {
