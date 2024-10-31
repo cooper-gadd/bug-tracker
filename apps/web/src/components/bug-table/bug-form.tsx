@@ -91,9 +91,17 @@ export function BugForm() {
     projectId: form.watch("projectId"),
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     data.statusId = data.assignedToId ? 2 : 1;
     console.log(data);
+    await fetch(`${BASE_URL}/api/bug`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    mutate(`${BASE_URL}/api/bugs`);
     toast(`Bug "${data.summary}" created`);
     form.reset();
   }

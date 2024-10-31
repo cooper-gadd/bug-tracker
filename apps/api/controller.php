@@ -60,19 +60,25 @@ class Controller
     int $projectId,
     int $ownerId,
     int $priorityId,
+    int $statusId,
     string $summary,
     string $description,
     ?string $assignedToId,
     ?string $targetDate
   ): void {
+    if ($targetDate !== null) {
+      $targetDate = date("Y-m-d H:i:s", strtotime($targetDate));
+    }
+
     $sql =
-      "INSERT INTO bugs (projectId, ownerId, priorityId, summary, description, assignedToId, targetDate) VALUES (:projectId, :ownerId, :priorityId, :summary, :description, :assignedToId, :targetDate)";
+      "INSERT INTO bugs (projectId, ownerId, priorityId, statusId, summary, description, assignedToId, targetDate) VALUES (:projectId, :ownerId, :priorityId, :statusId, :summary, :description, :assignedToId, :targetDate)";
     $stmt = $this->db->prepare($sql);
     try {
       $stmt->execute([
         ":projectId" => $projectId,
         ":ownerId" => $ownerId,
         ":priorityId" => $priorityId,
+        ":statusId" => $statusId,
         ":summary" => $summary,
         ":description" => $description,
         ":assignedToId" => $assignedToId,

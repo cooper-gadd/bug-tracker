@@ -43,6 +43,7 @@ route("/bug", "POST", function () use ($controller) {
   $projectId = $data["projectId"];
   $ownerId = $data["ownerId"];
   $priorityId = $data["priorityId"];
+  $statusId = $data["statusId"];
   $summary = $data["summary"];
   $description = $data["description"];
   $assignedToId = $data["assignedToId"] ?? null;
@@ -51,6 +52,7 @@ route("/bug", "POST", function () use ($controller) {
     (int) $projectId,
     (int) $ownerId,
     (int) $priorityId,
+    (int) $statusId,
     $summary,
     $description,
     $assignedToId,
