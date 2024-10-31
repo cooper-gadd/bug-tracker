@@ -69,10 +69,10 @@ export function BugForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       projectId: undefined,
-      ownerId: 1, // Assuming the current user is the owner
+      ownerId: 1, // TODO: change to current user
       assignedToId: null,
-      statusId: 1, // Assuming 1 is "Unassigned"
-      priorityId: 2, // Assuming 2 is "Medium"
+      statusId: 1,
+      priorityId: 2,
       summary: "",
       description: "",
       targetDate: null,
