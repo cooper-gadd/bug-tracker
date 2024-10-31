@@ -50,7 +50,8 @@ class Controller
           bug_status bs ON b.statusId = bs.id
         LEFT JOIN
           priority pr ON b.priorityId = pr.id
-      ";
+        ORDER BY
+          b.dateRaised DESC";
     $stmt = $this->db->query($sql);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
   }
