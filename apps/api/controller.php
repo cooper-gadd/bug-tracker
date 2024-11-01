@@ -20,6 +20,62 @@ class Controller
     }
   }
 
+  public function login(string $username, string $password): void
+  {
+    $sql =
+      "SELECT id, username, password FROM user_details WHERE username = :username";
+    $stmt = $this->db->prepare($sql);
+    try {
+      $stmt->execute(["username" => $username]);
+      $user = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($user && password_verify($password, $user["password"])) {
+        session_start();
+        $_SESSION["user_id"] = $user["id"];
+        http_response_code(200);
+        echo json_encode(["success" => true]);
+      } else {
+        http_response_code(401);
+        echo json_encode(["success" => false]);
+      }
+    } catch (PDOException $e) {
+      http_response_code(500);
+      echo json_encode(["success" => false, "error" => $e->getMessage()]);
+    }
+  }
+
+  public function logout(): void
+  {
+    unset($_SESSION["user_id"]);
+    http_response_code(200);
+    echo json_encode(["success" => true]);
+  }
+
+  public function getCurrentUser(): void
+  {
+    if (isset($_SESSION["user_id"])) {
+      $sql = "SELECT
+                ud.id,
+                ud.username,
+                r.role,
+                p.project,
+                ud.name
+              FROM
+                user_details ud
+              LEFT JOIN
+                role r ON ud.RoleID = r.id
+              LEFT JOIN
+                project p ON ud.ProjectId = p.id
+              WHERE
+                ud.id = :id";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute(["id" => $_SESSION["user_id"]]);
+      echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
+    } else {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+    }
+  }
+
   public function getBugs(): void
   {
     $sql = "

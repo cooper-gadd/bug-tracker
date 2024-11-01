@@ -9,6 +9,9 @@ if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
   exit();
 }
 
+session_name("bug-tracker");
+session_start();
+
 require_once "controller.php";
 
 $controller = new Controller();
@@ -33,6 +36,21 @@ function route(string $uriPattern, string $method, callable $callback): void
     exit();
   }
 }
+
+route("/login", "POST", function () use ($controller) {
+  $data = json_decode(file_get_contents("php://input"), true);
+  $username = $data["username"];
+  $password = $data["password"];
+  $controller->login($username, $password);
+});
+
+route("/logout", "POST", function () use ($controller) {
+  $controller->logout();
+});
+
+route("/currentUser", "GET", function () use ($controller) {
+  $controller->getCurrentUser();
+});
 
 route("/bugs", "GET", function () use ($controller) {
   $controller->getBugs();
