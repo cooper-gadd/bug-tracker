@@ -224,8 +224,16 @@ class Controller
     $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
     $roleId = $currentUserInfo["roleId"];
 
-    // TODO: add owner id check for users
-    if ($roleId === 3 && $projectId !== $currentUserInfo["projectid"]) {
+    $sql = "SELECT ownerId from bugs where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $id]);
+    $ownerId = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (
+      $roleId === 3 &&
+      $projectId !== $currentUserInfo["projectid"] &&
+      $ownerId !== $_SESSION["user_id"]
+    ) {
       http_response_code(403);
       echo json_encode(["error" => "Forbidden"]);
       return;
