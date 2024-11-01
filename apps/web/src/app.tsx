@@ -28,7 +28,7 @@ export default function App() {
   } = useCurrentUser();
 
   async function handleLogout() {
-    await fetch("/api/logout", {
+    await fetch(`${BASE_URL}/api/logout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
