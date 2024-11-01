@@ -181,7 +181,4 @@ route("/user/{id}", "PUT", function ($userId) use ($controller) {
 route("/user/delete/{id}", "GET", function ($userId) use ($controller) {
   $controller->deleteUser((int) $userId);
 });
-
-http_response_code(404);
-echo json_encode(["message" => "Endpoint not found"]);
 ?>
