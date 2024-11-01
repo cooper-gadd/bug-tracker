@@ -100,7 +100,7 @@ export function EditForm({
   } = usePriorities();
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    data.statusId = data.assignedToId && !data.dateClosed ? 2 : 1;
+    data.statusId = data.dateClosed ? 3 : data.assignedToId ? 2 : 1;
 
     await fetch(`${BASE_URL}/api/bug/${bug.id}`, {
       method: "PUT",

@@ -34,6 +34,7 @@ export default function App() {
         "Content-Type": "application/json",
       },
     });
+    setTable("bugs");
     mutate(`${BASE_URL}/api/current-user`);
     mutate(`${BASE_URL}/api/bugs`);
   }
