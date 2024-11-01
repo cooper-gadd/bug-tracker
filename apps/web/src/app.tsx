@@ -35,13 +35,14 @@ export default function App() {
       },
     });
     mutate(`${BASE_URL}/api/current-user`);
+    mutate(`${BASE_URL}/api/bugs`);
   }
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8">
       {currentUserLoading && <p>Loading...</p>}
       {currentUserError && <LoginForm />}
-      {currentUser && (
+      {!currentUserLoading && !currentUserError && currentUser && (
         <>
           <div className="flex items-center justify-between space-y-2">
             <div>
