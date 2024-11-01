@@ -85,6 +85,11 @@ class Controller
 
   public function getBugs(): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql = "SELECT roleId, projectid from user_details where id = :id";
     $stmt = $this->db->prepare($sql);
     $stmt->execute(["id" => $_SESSION["user_id"]]);
@@ -144,6 +149,11 @@ class Controller
     ?string $assignedToId,
     ?string $targetDate
   ): void {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     if ($targetDate !== null) {
       $targetDate = date("Y-m-d H:i:s", strtotime($targetDate));
     }
@@ -182,6 +192,11 @@ class Controller
     ?string $fixDescription,
     ?string $dateClosed
   ): void {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     if ($targetDate !== null) {
       $targetDate = date("Y-m-d H:i:s", strtotime($targetDate));
     }
@@ -227,6 +242,11 @@ class Controller
 
   public function getProjects(): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql = "SELECT id, project FROM project ORDER BY project";
     $stmt = $this->db->query($sql);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
@@ -234,6 +254,11 @@ class Controller
 
   public function createProject(string $project): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql = "INSERT INTO project (project) VALUES (:project)";
     $stmt = $this->db->prepare($sql);
     try {
@@ -248,6 +273,11 @@ class Controller
 
   public function getRoles(): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql = "SELECT id, role FROM role ORDER BY role";
     $stmt = $this->db->query($sql);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
@@ -255,6 +285,11 @@ class Controller
 
   public function getPriorities(): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql = "SELECT id, priority FROM priority ORDER BY priority";
     $stmt = $this->db->query($sql);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
@@ -262,6 +297,11 @@ class Controller
 
   public function assign(int $bugId, int $assignedToId): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql =
       "UPDATE bugs SET assignedToId = :assignedToId, statusId = 2 WHERE id = :bugId";
     $stmt = $this->db->prepare($sql);
@@ -280,6 +320,11 @@ class Controller
 
   public function close(int $bugId, string $fixDescription): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql =
       "UPDATE bugs SET statusId = 3, fixDescription = :fixDescription, dateClosed = now() WHERE id = :bugId";
     $stmt = $this->db->prepare($sql);
@@ -298,6 +343,11 @@ class Controller
 
   public function getUsers(): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql = "SELECT
     ud.id,
     ud.username,
@@ -317,6 +367,11 @@ class Controller
 
   public function getUsersByProjectId(int $projectId): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql =
       "SELECT id, name FROM user_details WHERE ProjectId = :project_id ORDER BY name";
     $stmt = $this->db->prepare($sql);
@@ -326,6 +381,11 @@ class Controller
 
   public function getUserById(int $id): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     $sql = "SELECT * FROM user_details WHERE Id = :id";
     $stmt = $this->db->prepare($sql);
     $stmt->execute([":id" => $id]);
@@ -339,6 +399,12 @@ class Controller
     string $password,
     string $name
   ): void {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
+
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
     $sql =
@@ -369,6 +435,12 @@ class Controller
     string $password,
     string $name
   ): void {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
+
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
     $sql =
@@ -394,6 +466,11 @@ class Controller
 
   public function deleteUser(int $id): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
     try {
       $this->db->beginTransaction();
 
