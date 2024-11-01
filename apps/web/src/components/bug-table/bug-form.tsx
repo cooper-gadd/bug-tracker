@@ -306,52 +306,6 @@ export function BugForm() {
                 currentUser.role === "Manager") && (
                 <FormField
                   control={form.control}
-                  name="priorityId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Priority</FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
-                        value={field.value?.toString()}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select priority" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {prioritiesLoading && (
-                            <SelectItem disabled value="loading">
-                              Loading...
-                            </SelectItem>
-                          )}
-                          {prioritiesError && (
-                            <SelectItem disabled value="error">
-                              Error loading priorities
-                            </SelectItem>
-                          )}
-                          {priorities &&
-                            priorities.map((priority) => (
-                              <SelectItem
-                                key={priority.id}
-                                value={priority.id.toString()}
-                              >
-                                {priority.priority}
-                              </SelectItem>
-                            ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-
-            {currentUser &&
-              (currentUser.role === "Admin" ||
-                currentUser.role === "Manager") && (
-                <FormField
-                  control={form.control}
                   name="targetDate"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
