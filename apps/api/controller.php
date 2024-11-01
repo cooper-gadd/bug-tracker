@@ -80,6 +80,12 @@ class Controller
 
   public function getBugs(): void
   {
+    $sql = "SELECT roleId, projectid from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+    $projectId = $currentUserInfo["projectid"];
     $sql = "
         SELECT
           b.id,
@@ -109,11 +115,15 @@ class Controller
         LEFT JOIN
           bug_status bs ON b.statusId = bs.id
         LEFT JOIN
-          priority pr ON b.priorityId = pr.id
-        ORDER BY
-          b.dateRaised DESC";
-    $stmt = $this->db->query($sql);
-    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+          priority pr ON b.priorityId = pr.id";
+    if ($roleId === 3) {
+      $stmt = $this->db->prepare($sql . " WHERE p.id = :projectId");
+      $stmt->execute(["projectId" => $projectId]);
+      echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    } else {
+      $stmt = $this->db->query($sql);
+      echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
   }
 
   public function createBug(
