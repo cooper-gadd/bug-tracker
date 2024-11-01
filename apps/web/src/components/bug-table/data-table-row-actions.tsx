@@ -20,6 +20,7 @@ import React from "react";
 import { AssignForm } from "./assign-form";
 import { CloseForm } from "./close-form";
 import { EditForm } from "./edit-form";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -28,6 +29,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
+  const { data: currentUser } = useCurrentUser();
   const bug = bugTableSchema.parse(row.original);
   const [action, setAction] = React.useState<
     "info" | "edit" | "assign" | "close"
@@ -39,7 +41,7 @@ export function DataTableRowActions<TData>({
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted  ml-auto"
+            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted ml-auto"
           >
             <DotsHorizontalIcon className="h-4 w-4" />
             <span className="sr-only">Open menu</span>
@@ -51,16 +53,25 @@ export function DataTableRowActions<TData>({
               Info
             </DropdownMenuItem>
           </DialogTrigger>
-          <DialogTrigger asChild>
-            <DropdownMenuItem onClick={() => setAction("edit")}>
-              Edit
-            </DropdownMenuItem>
-          </DialogTrigger>
-          <DialogTrigger asChild>
-            <DropdownMenuItem onClick={() => setAction("assign")}>
-              Assign
-            </DropdownMenuItem>
-          </DialogTrigger>
+          {currentUser &&
+            (currentUser.role === "Admin" ||
+              currentUser.role === "Manager" ||
+              currentUser.id === bug.ownerId) && (
+              <DialogTrigger asChild>
+                <DropdownMenuItem onClick={() => setAction("edit")}>
+                  Edit
+                </DropdownMenuItem>
+              </DialogTrigger>
+            )}
+          {currentUser &&
+            (currentUser.role === "Admin" ||
+              currentUser.role === "Manager") && (
+              <DialogTrigger asChild>
+                <DropdownMenuItem onClick={() => setAction("assign")}>
+                  Assign
+                </DropdownMenuItem>
+              </DialogTrigger>
+            )}
           <DialogTrigger asChild>
             <DropdownMenuItem onClick={() => setAction("close")}>
               Close

@@ -53,6 +53,7 @@ export const bugTableSchema = z.object({
   project: projectSchema.shape.project,
   projectId: projectSchema.shape.id,
   owner: userDetailsSchema.shape.name,
+  ownerId: userDetailsSchema.shape.id,
   assignedTo: userDetailsSchema.shape.name.nullable(),
   assignedToId: userDetailsSchema.shape.id.nullable(),
   status: bugStatusSchema.shape.status,

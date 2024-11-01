@@ -92,6 +92,7 @@ class Controller
           p.project,
           p.id AS projectId,
           u1.name AS owner,
+          u1.id AS ownerId,
           u2.name AS assignedTo,
           u2.id AS assignedToId,
           bs.status,
@@ -117,7 +118,9 @@ class Controller
         LEFT JOIN
           priority pr ON b.priorityId = pr.id";
     if ($roleId === 3) {
-      $stmt = $this->db->prepare($sql . " WHERE p.id = :projectId");
+      $stmt = $this->db->prepare(
+        $sql . " WHERE p.id = :projectId AND b.statusId != 3"
+      );
       $stmt->execute(["projectId" => $projectId]);
       echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     } else {
