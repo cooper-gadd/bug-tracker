@@ -146,10 +146,6 @@ route("/users/project/{projectId}", "GET", function ($projectId) use (
   $controller->getUsersByProjectId((int) $projectId);
 });
 
-route("/user/{id}", "GET", function ($userId) use ($controller) {
-  $controller->getUserById((int) $userId);
-});
-
 route("/user", "POST", function () use ($controller) {
   $data = json_decode(file_get_contents("php://input"), true);
   $username = $data["username"];
@@ -158,23 +154,6 @@ route("/user", "POST", function () use ($controller) {
   $password = $data["password"];
   $name = $data["name"];
   $controller->createUser($username, $roleId, $projectId, $password, $name);
-});
-
-route("/user/{id}", "PUT", function ($userId) use ($controller) {
-  $data = json_decode(file_get_contents("php://input"), true);
-  $username = $data["Username"];
-  $roleId = $data["RoleID"];
-  $projectId = $data["ProjectId"] ?? null;
-  $password = $data["Password"];
-  $name = $data["Name"];
-  $controller->updateUser(
-    (int) $userId,
-    $username,
-    $roleId,
-    $projectId,
-    $password,
-    $name
-  );
 });
 
 // RIT Solace Server does not support DELETE method

@@ -59,6 +59,12 @@ class Controller
 
   public function getCurrentUser(): void
   {
+    if (!isset($_SESSION["user_id"])) {
+      http_response_code(401);
+      echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
+
     if (isset($_SESSION["user_id"])) {
       $sql = "SELECT
                 ud.id,
@@ -90,6 +96,7 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
     $sql = "SELECT roleId, projectid from user_details where id = :id";
     $stmt = $this->db->prepare($sql);
     $stmt->execute(["id" => $_SESSION["user_id"]]);
@@ -154,6 +161,19 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId, projectid from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
+    if ($roleId === 3 && $projectId !== $currentUserInfo["projectid"]) {
+      http_response_code(403);
+      echo json_encode(["error" => "Forbidden"]);
+      return;
+    }
+
     if ($targetDate !== null) {
       $targetDate = date("Y-m-d H:i:s", strtotime($targetDate));
     }
@@ -197,6 +217,20 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId, projectid from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
+    // TODO: add owner id check for users
+    if ($roleId === 3 && $projectId !== $currentUserInfo["projectid"]) {
+      http_response_code(403);
+      echo json_encode(["error" => "Forbidden"]);
+      return;
+    }
+
     if ($targetDate !== null) {
       $targetDate = date("Y-m-d H:i:s", strtotime($targetDate));
     }
@@ -247,9 +281,27 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId, projectid from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+    $projectId = $currentUserInfo["projectid"];
+
     $sql = "SELECT id, project FROM project ORDER BY project";
     $stmt = $this->db->query($sql);
-    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // only return user's project if not admin or manager
+    if ($roleId === 3) {
+      $projects = array_filter($projects, function ($project) use ($projectId) {
+        return $project["id"] === $projectId;
+      });
+      $projects = array_values($projects);
+    }
+
+    echo json_encode($projects);
   }
 
   public function createProject(string $project): void
@@ -259,6 +311,19 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
+    if ($roleId === 3) {
+      http_response_code(403);
+      echo json_encode(["error" => "Forbidden"]);
+      return;
+    }
+
     $sql = "INSERT INTO project (project) VALUES (:project)";
     $stmt = $this->db->prepare($sql);
     try {
@@ -278,6 +343,19 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
+    if ($roleId !== 1) {
+      http_response_code(403);
+      echo json_encode(["error" => "Forbidden"]);
+      return;
+    }
+
     $sql = "SELECT id, role FROM role ORDER BY role";
     $stmt = $this->db->query($sql);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
@@ -290,9 +368,26 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
     $sql = "SELECT id, priority FROM priority ORDER BY priority";
     $stmt = $this->db->query($sql);
-    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    $priorities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // only return medium priority if not admin or manager
+    if ($roleId === 3) {
+      $priorities = array_filter($priorities, function ($priority) {
+        return $priority["id"] === 2;
+      });
+      $priorities = array_values($priorities);
+    }
+
+    echo json_encode($priorities);
   }
 
   public function assign(int $bugId, int $assignedToId): void
@@ -302,6 +397,19 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
+    if ($roleId === 3) {
+      http_response_code(403);
+      echo json_encode(["error" => "Forbidden"]);
+      return;
+    }
+
     $sql =
       "UPDATE bugs SET assignedToId = :assignedToId, statusId = 2 WHERE id = :bugId";
     $stmt = $this->db->prepare($sql);
@@ -325,6 +433,7 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
     $sql =
       "UPDATE bugs SET statusId = 3, fixDescription = :fixDescription, dateClosed = now() WHERE id = :bugId";
     $stmt = $this->db->prepare($sql);
@@ -348,6 +457,19 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
+    if ($roleId !== 1) {
+      http_response_code(403);
+      echo json_encode(["error" => "Forbidden"]);
+      return;
+    }
+
     $sql = "SELECT
     ud.id,
     ud.username,
@@ -372,24 +494,27 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
     $sql =
       "SELECT id, name FROM user_details WHERE ProjectId = :project_id ORDER BY name";
     $stmt = $this->db->prepare($sql);
     $stmt->execute([":project_id" => $projectId]);
-    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-  }
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-  public function getUserById(int $id): void
-  {
-    if (!isset($_SESSION["user_id"])) {
-      http_response_code(401);
-      echo json_encode(["error" => "Not logged in"]);
-      return;
+    // if user, then only display current user
+    if ($roleId === 1) {
+      $users = array_filter($users, function ($user) {
+        return $user["id"] === $_SESSION["user_id"];
+      });
+      $users = array_values($users);
     }
-    $sql = "SELECT * FROM user_details WHERE Id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([":id" => $id]);
-    echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
+    echo json_encode($users);
   }
 
   public function createUser(
@@ -402,6 +527,18 @@ class Controller
     if (!isset($_SESSION["user_id"])) {
       http_response_code(401);
       echo json_encode(["error" => "Not logged in"]);
+      return;
+    }
+
+    $sql = "SELECT roleId from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
+    if ($roleId !== 1) {
+      http_response_code(403);
+      echo json_encode(["error" => "Forbidden"]);
       return;
     }
 
@@ -427,43 +564,6 @@ class Controller
     }
   }
 
-  public function updateUser(
-    int $id,
-    string $username,
-    int $roleId,
-    ?int $projectId,
-    string $password,
-    string $name
-  ): void {
-    if (!isset($_SESSION["user_id"])) {
-      http_response_code(401);
-      echo json_encode(["error" => "Not logged in"]);
-      return;
-    }
-
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-    $sql =
-      "UPDATE user_details SET Username = :username, RoleID = :roleId, ProjectId = :projectId, Password = :password, Name = :name WHERE Id = :id";
-    $stmt = $this->db->prepare($sql);
-
-    try {
-      $stmt->execute([
-        ":id" => $id,
-        ":username" => $username,
-        ":roleId" => $roleId,
-        ":projectId" => $projectId,
-        ":password" => $hashedPassword,
-        ":name" => $name,
-      ]);
-      http_response_code(200);
-      echo json_encode(["success" => true]);
-    } catch (PDOException $e) {
-      http_response_code(500);
-      echo json_encode(["error" => $e->getMessage()]);
-    }
-  }
-
   public function deleteUser(int $id): void
   {
     if (!isset($_SESSION["user_id"])) {
@@ -471,6 +571,19 @@ class Controller
       echo json_encode(["error" => "Not logged in"]);
       return;
     }
+
+    $sql = "SELECT roleId from user_details where id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $_SESSION["user_id"]]);
+    $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $roleId = $currentUserInfo["roleId"];
+
+    if ($roleId !== 1) {
+      http_response_code(403);
+      echo json_encode(["error" => "Forbidden"]);
+      return;
+    }
+
     try {
       $this->db->beginTransaction();
 
