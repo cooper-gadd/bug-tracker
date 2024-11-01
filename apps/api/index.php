@@ -38,7 +38,6 @@ function route(string $uriPattern, string $method, callable $callback): void
 
 route("/", "GET", function () use ($seed) {
   $seed->init();
-  echo json_encode(["message" => "Welcome to the Bug Tracker API"]);
 });
 
 route("/login", "POST", function () use ($controller) {
