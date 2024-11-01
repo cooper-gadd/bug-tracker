@@ -17,7 +17,7 @@ This bug tracking system is developed for my Server Programming class, featuring
 ## Users to Test
 - **Admin**: Username: `sam@me.me`, Password: `password`
 - **Manager**: Username: `meg@me.me`, Password: `password`
-- **User**: Username: `steve@me.me`, Password: ``
+- **User**: Username: `steve@me.me`, Password: `password`
 
 ## System Architecture Diagram
 
