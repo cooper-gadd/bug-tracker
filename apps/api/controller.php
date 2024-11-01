@@ -20,20 +20,6 @@ class Controller
     }
   }
 
-  public function hashAllPasswords(): void
-  {
-    $sql = "SELECT id, password FROM user_details LIMIT 10";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($users as $user) {
-      $hashedPassword = password_hash($user["password"], PASSWORD_BCRYPT);
-      $sql = "UPDATE user_details SET password = :password WHERE id = :id";
-      $stmt = $this->db->prepare($sql);
-      $stmt->execute(["password" => $hashedPassword, "id" => $user["id"]]);
-    }
-  }
-
   public function login(string $username, string $password): void
   {
     $sql =

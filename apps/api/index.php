@@ -10,14 +10,13 @@ if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
 }
 
 require_once "controller.php";
+require_once "seed.php";
 
 $controller = new Controller();
+$seed = new Seed();
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 $requestUri = $_SERVER["REQUEST_URI"];
 $baseUri = "/~ctg7866/ISTE341/bug-tracker/api";
-
-// to hash the seeded passwords
-$controller->hashAllPasswords();
 
 function route(string $uriPattern, string $method, callable $callback): void
 {
@@ -36,6 +35,11 @@ function route(string $uriPattern, string $method, callable $callback): void
     exit();
   }
 }
+
+route("/", "GET", function () use ($seed) {
+  $seed->init();
+  echo json_encode(["message" => "Welcome to the Bug Tracker API"]);
+});
 
 route("/login", "POST", function () use ($controller) {
   $data = json_decode(file_get_contents("php://input"), true);
