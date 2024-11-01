@@ -161,14 +161,20 @@ export function BugForm() {
                         </SelectItem>
                       )}
                       {projects &&
-                        projects.map((project) => (
-                          <SelectItem
-                            key={project.id}
-                            value={project.id.toString()}
-                          >
-                            {project.project}
-                          </SelectItem>
-                        ))}
+                        projects
+                          .filter((project) =>
+                            currentUser?.project
+                              ? project.project === currentUser.project
+                              : true,
+                          )
+                          .map((project) => (
+                            <SelectItem
+                              key={project.id}
+                              value={project.id.toString()}
+                            >
+                              {project.project}
+                            </SelectItem>
+                          ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

@@ -89,7 +89,7 @@ export default function App() {
                         {currentUser.name}
                       </p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        {currentUser.username}
+                        {currentUser.project || currentUser.username}
                       </p>
                     </div>
                   </DropdownMenuLabel>
