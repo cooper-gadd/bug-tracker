@@ -1,5 +1,31 @@
 # Bug Tracking System
 
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Demo](#demo)
+  - [Bugs Dashboard](#bugs-dashboard)
+  - [Filtering](#filtering)
+  - [Actions](#actions)
+  - [New Bug](#new-bug)
+  - [Projects Dashboard](#projects-dashboard)
+  - [New Project](#new-project)
+  - [Users Dashboard](#users-dashboard)
+  - [New User](#new-user)
+  - [Delete User](#delete-user)
+- [Key Features](#key-features)
+- [Test Users](#test-users)
+- [System Architecture Diagram](#system-architecture-diagram)
+- [Technical Stack](#technical-stack)
+- [Libraries and Tools](#libraries-and-tools)
+- [API Endpoints](#api-endpoints)
+- [User Roles and Permissions](#user-roles-and-permissions)
+- [Security Measures](#security-measures)
+- [Code Structure](#code-structure)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
+- [Development](#development)
+- [Deployment](#deployment)
+
 ## Project Overview
 This bug tracking system is developed for my Server Programming class, featuring a React frontend and PHP backend. It efficiently manages bugs across various projects with role-based access control.
 
