@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { BASE_URL } from "@/constants";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { usePriorities } from "@/hooks/use-priorities";
 import { useProjectUsers } from "@/hooks/use-project-users";
 import { useProjects } from "@/hooks/use-projects";
@@ -65,11 +66,12 @@ const formSchema = z.object({
 });
 
 export function BugForm() {
+  const { data: currentUser } = useCurrentUser();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       projectId: undefined,
-      ownerId: 1, // TODO: change to current user
+      ownerId: currentUser?.id || 10, // admin default
       assignedToId: null,
       statusId: 1,
       priorityId: 2,
@@ -207,46 +209,53 @@ export function BugForm() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="assignedToId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Assigned To</FormLabel>
-                  <Select
-                    onValueChange={(value) =>
-                      field.onChange(value ? Number(value) : null)
-                    }
-                    value={field.value?.toString() || ""}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select assignee" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {projectUsersLoading && (
-                        <SelectItem disabled value="loading">
-                          Loading...
-                        </SelectItem>
-                      )}
-                      {projectUsersError && (
-                        <SelectItem disabled value="error">
-                          Error loading users
-                        </SelectItem>
-                      )}
-                      {projectUsers &&
-                        projectUsers.map((user) => (
-                          <SelectItem key={user.id} value={user.id.toString()}>
-                            {user.name}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {currentUser &&
+              (currentUser.role === "Admin" ||
+                (currentUser.role === "Manager" && (
+                  <FormField
+                    control={form.control}
+                    name="assignedToId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Assigned To</FormLabel>
+                        <Select
+                          onValueChange={(value) =>
+                            field.onChange(value ? Number(value) : null)
+                          }
+                          value={field.value?.toString() || ""}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select assignee" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {projectUsersLoading && (
+                              <SelectItem disabled value="loading">
+                                Loading...
+                              </SelectItem>
+                            )}
+                            {projectUsersError && (
+                              <SelectItem disabled value="error">
+                                Error loading users
+                              </SelectItem>
+                            )}
+                            {projectUsers &&
+                              projectUsers.map((user) => (
+                                <SelectItem
+                                  key={user.id}
+                                  value={user.id.toString()}
+                                >
+                                  {user.name}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )))}
 
             <FormField
               control={form.control}
@@ -290,47 +299,100 @@ export function BugForm() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="targetDate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Target Date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
+            {currentUser &&
+              (currentUser.role === "Admin" ||
+                (currentUser.role === "Manager" && (
+                  <FormField
+                    control={form.control}
+                    name="priorityId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Priority</FormLabel>
+                        <Select
+                          onValueChange={(value) =>
+                            field.onChange(Number(value))
+                          }
+                          value={field.value?.toString()}
                         >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value || undefined}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date <= new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select priority" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {prioritiesLoading && (
+                              <SelectItem disabled value="loading">
+                                Loading...
+                              </SelectItem>
+                            )}
+                            {prioritiesError && (
+                              <SelectItem disabled value="error">
+                                Error loading priorities
+                              </SelectItem>
+                            )}
+                            {priorities &&
+                              priorities.map((priority) => (
+                                <SelectItem
+                                  key={priority.id}
+                                  value={priority.id.toString()}
+                                >
+                                  {priority.priority}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )))}
+
+            {currentUser &&
+              (currentUser.role === "Admin" ||
+                (currentUser.role === "Manager" && (
+                  <FormField
+                    control={form.control}
+                    name="targetDate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Target Date</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "text-left font-normal",
+                                  !field.value && "text-muted-foreground",
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value || undefined}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date <= new Date() ||
+                                date < new Date("1900-01-01")
+                              }
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )))}
 
             <DialogFooter>
               <Button type="submit">Submit</Button>
