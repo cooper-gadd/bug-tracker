@@ -39,11 +39,11 @@ export default function App() {
   }
 
   return (
-    <div className="h-full flex-1 flex-col space-y-8 p-8">
+    <div>
       {currentUserLoading && <p>Loading...</p>}
       {currentUserError && <LoginForm />}
       {!currentUserLoading && !currentUserError && currentUser && (
-        <>
+        <div className="p-8 flex-1 flex-col space-y-8 h-full">
           <div className="flex items-center justify-between space-y-2">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">
@@ -120,7 +120,7 @@ export default function App() {
           {table === "bugs" && <BugTable />}
           {table === "projects" && <ProjectTable />}
           {table === "users" && <UserDetailsTable />}
-        </>
+        </div>
       )}
       <Toaster />
     </div>

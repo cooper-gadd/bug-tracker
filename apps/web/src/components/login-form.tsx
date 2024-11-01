@@ -9,7 +9,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -53,14 +52,12 @@ export function LoginForm() {
     <div className="flex min-h-screen items-center justify-center">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account.
-          </CardDescription>
+          <CardTitle className="text-2xl">Bug Tracker</CardTitle>
+          <CardDescription>Efficiently manage bugs</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="username"
@@ -70,9 +67,6 @@ export function LoginForm() {
                     <FormControl>
                       <Input placeholder="cooper@me.me" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is the username you signed up with.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -86,16 +80,11 @@ export function LoginForm() {
                     <FormControl>
                       <Input type="password" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is the password you signed up with.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Sign in
-              </Button>
+              <Button type="submit">Sign in</Button>
             </form>
           </Form>
         </CardContent>
