@@ -38,7 +38,6 @@ export function ProjectForm() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
     await fetch(`${BASE_URL}/api/project`, {
       method: "POST",
       headers: {

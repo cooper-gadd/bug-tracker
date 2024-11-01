@@ -98,7 +98,6 @@ export function BugForm() {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     data.statusId = data.assignedToId ? 2 : 1;
-    console.log(data);
     await fetch(`${BASE_URL}/api/bug`, {
       method: "POST",
       headers: {

@@ -65,7 +65,6 @@ export function UserDetailsForm() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
     await fetch(`${BASE_URL}/api/user`, {
       method: "POST",
       headers: {

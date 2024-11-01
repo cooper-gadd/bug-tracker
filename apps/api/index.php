@@ -9,15 +9,15 @@ if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
   exit();
 }
 
-session_name("bug-tracker");
-session_start();
-
 require_once "controller.php";
 
 $controller = new Controller();
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 $requestUri = $_SERVER["REQUEST_URI"];
 $baseUri = "/~ctg7866/ISTE341/bug-tracker/api";
+
+// to hash the seeded passwords
+$controller->hashAllPasswords();
 
 function route(string $uriPattern, string $method, callable $callback): void
 {
@@ -48,7 +48,7 @@ route("/logout", "POST", function () use ($controller) {
   $controller->logout();
 });
 
-route("/currentUser", "GET", function () use ($controller) {
+route("/current-user", "GET", function () use ($controller) {
   $controller->getCurrentUser();
 });
 

@@ -50,7 +50,6 @@ export function AssignForm({
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
     await fetch(`${BASE_URL}/api/assign`, {
       method: "POST",
       headers: {

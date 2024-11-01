@@ -20,6 +20,20 @@ class Controller
     }
   }
 
+  public function hashAllPasswords(): void
+  {
+    $sql = "SELECT id, password FROM user_details LIMIT 10";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($users as $user) {
+      $hashedPassword = password_hash($user["password"], PASSWORD_BCRYPT);
+      $sql = "UPDATE user_details SET password = :password WHERE id = :id";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute(["password" => $hashedPassword, "id" => $user["id"]]);
+    }
+  }
+
   public function login(string $username, string $password): void
   {
     $sql =
@@ -29,6 +43,7 @@ class Controller
       $stmt->execute(["username" => $username]);
       $user = $stmt->fetch(PDO::FETCH_ASSOC);
       if ($user && password_verify($password, $user["password"])) {
+        session_name("bug-tracker");
         session_start();
         $_SESSION["user_id"] = $user["id"];
         http_response_code(200);
@@ -45,13 +60,17 @@ class Controller
 
   public function logout(): void
   {
+    session_start();
     unset($_SESSION["user_id"]);
+    session_unset();
+    session_destroy();
     http_response_code(200);
     echo json_encode(["success" => true]);
   }
 
   public function getCurrentUser(): void
   {
+    session_start();
     if (isset($_SESSION["user_id"])) {
       $sql = "SELECT
                 ud.id,
