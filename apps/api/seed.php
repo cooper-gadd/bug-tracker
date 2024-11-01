@@ -67,16 +67,16 @@ class Seed
        CONSTRAINT `fk_project_assigned` FOREIGN KEY (`ProjectId`) REFERENCES `project` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
       ) ENGINE=InnoDB;
       INSERT INTO user_details (Username, RoleID, ProjectId, Password, Name) VALUES
-      ('steve@me.me', 3, 1, 'password', 'Steve Jobs'),
-      ('elon@me.me', 3, 1, 'password', 'Elon Musk'),
-      ('bill@me.me', 3, 1, 'password', 'Bill Gates'),
-      ('mark@me.me', 3, 2, 'password', 'Mark Zuckerberg'),
-      ('jeff@me.me', 3, 2, 'password', 'Jeff Bezos'),
-      ('larry@me.me', 3, 2, 'password', 'Larry Page'),
-      ('marissa@me.me', 2, NULL, 'password', 'Marissa Mayer'),
-      ('meg@me.me', 2, NULL, 'password', 'Meg Whitman'),
-      ('michael@me.me', 2, NULL, 'password', 'Michael Dell'),
-      ('sam@me.me', 1, NULL, 'password', 'Sam Altman');
+      ('steve@me.me', 3, 1, 'me', 'Steve Jobs'),
+      ('elon@me.me', 3, 1, 'me', 'Elon Musk'),
+      ('bill@me.me', 3, 1, 'me', 'Bill Gates'),
+      ('mark@me.me', 3, 2, 'me', 'Mark Zuckerberg'),
+      ('jeff@me.me', 3, 2, 'me', 'Jeff Bezos'),
+      ('larry@me.me', 3, 2, 'me', 'Larry Page'),
+      ('marissa@me.me', 2, NULL, 'me', 'Marissa Mayer'),
+      ('meg@me.me', 2, NULL, 'me', 'Meg Whitman'),
+      ('michael@me.me', 2, NULL, 'me', 'Michael Dell'),
+      ('sam@me.me', 1, NULL, 'me', 'Sam Altman');
 
       CREATE TABLE bug_status
       (

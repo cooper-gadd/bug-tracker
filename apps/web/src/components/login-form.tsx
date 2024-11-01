@@ -45,6 +45,7 @@ export function LoginForm() {
       body: JSON.stringify(data),
     });
     mutate(`${BASE_URL}/api/current-user`);
+    mutate(`${BASE_URL}/api/bugs`);
     form.reset();
   }
 

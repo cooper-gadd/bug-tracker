@@ -15,9 +15,9 @@ This bug tracking system is developed for my Server Programming class, featuring
 - Security: Input validation, data sanitization, and password hashing
 
 ## Users to Test
-- **Admin**: Username: `sam@me.me`, Password: `password`
-- **Manager**: Username: `meg@me.me`, Password: `password`
-- **User**: Username: `steve@me.me`, Password: `password`
+- **Admin**: Username: `sam@me.me`, Password: `me`
+- **Manager**: Username: `meg@me.me`, Password: `me`
+- **User**: Username: `steve@me.me`, Password: `me`
 
 ## System Architecture Diagram
 
