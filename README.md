@@ -6,13 +6,18 @@ This bug tracking system is developed for my Server Programming class, featuring
 ## Key Features
 - Single Page Application (SPA) with React
 - RESTful API backend in PHP
-- User Authentication with Cookies
+- User Authentication with sessions
 - Role-Based Access Control: Admin, Manager, and User roles
 - Bug Management: CRUD operations for bugs
 - Project Management: Create and manage projects (Admin and Manager)
 - User Management: Add, update, and delete users (Admin only)
 - Data Visualization: Dynamic views of bugs by project, status, and due date
 - Security: Input validation, data sanitization, and password hashing
+
+## Users to Test
+- **Admin**: Username: `sam@me.me`, Password: `password`
+- **Manager**: Username: `meg@me.me`, Password: `password`
+- **User**: Username: `steve@me.me`, Password: ``
 
 ## System Architecture Diagram
 
@@ -28,7 +33,7 @@ graph LR
 - Backend: PHP
 - Database: MySQL
 - API: RESTful
-- Authentication: Cookies
+- Authentication: Sessions
 
 ## API Endpoints
 - `/api/auth` - Authentication endpoints
@@ -42,7 +47,7 @@ graph LR
 - **User**: Bug entry and management within assigned project
 
 ## Security Measures
-- Cookies for secure authentication
+- Session-based authentication
 - Password hashing using bcrypt
 - Parameterized queries to prevent SQL injection
 - Input validation on both frontend and backend
@@ -56,7 +61,7 @@ graph LR
 ### Backend
 - Index: Entry point for API requests
 - Controllers: Handle API requests
-- Models: Database interactions
+- Seed: Initial data for database
 
 ## Development
 - Frontend: Run `bun run dev` in the frontend directory
