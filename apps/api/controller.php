@@ -19,7 +19,9 @@ class Controller
       $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
       $this->db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
     } catch (PDOException $e) {
-      die("Connection failed: " . $e->getMessage());
+      http_response_code(500);
+      echo json_encode(["error" => "Connection failed: " . $e->getMessage()]);
+      exit();
     }
   }
 
@@ -37,11 +39,14 @@ class Controller
         echo json_encode(["success" => true]);
       } else {
         http_response_code(401);
-        echo json_encode(["success" => false]);
+        echo json_encode([
+          "success" => false,
+          "error" => "Invalid credentials",
+        ]);
       }
     } catch (PDOException $e) {
       http_response_code(500);
-      echo json_encode(["success" => false, "error" => $e->getMessage()]);
+      echo json_encode(["error" => $e->getMessage()]);
     }
   }
 
@@ -157,6 +162,7 @@ class Controller
         ":assignedToId" => $assignedToId,
         ":targetDate" => $targetDate,
       ]);
+      http_response_code(201);
       echo json_encode(["id" => $this->db->lastInsertId()]);
     } catch (PDOException $e) {
       http_response_code(500);
@@ -211,6 +217,7 @@ class Controller
         ":fixDescription" => $fixDescription,
         ":dateClosed" => $dateClosed,
       ]);
+      http_response_code(200);
       echo json_encode(["success" => true]);
     } catch (PDOException $e) {
       http_response_code(500);
@@ -231,6 +238,7 @@ class Controller
     $stmt = $this->db->prepare($sql);
     try {
       $stmt->execute([":project" => $project]);
+      http_response_code(201);
       echo json_encode(["id" => $this->db->lastInsertId()]);
     } catch (PDOException $e) {
       http_response_code(500);
@@ -262,6 +270,7 @@ class Controller
         ":assignedToId" => $assignedToId,
         ":bugId" => $bugId,
       ]);
+      http_response_code(200);
       echo json_encode(["success" => true]);
     } catch (PDOException $e) {
       http_response_code(500);
@@ -279,6 +288,7 @@ class Controller
         ":fixDescription" => $fixDescription,
         ":bugId" => $bugId,
       ]);
+      http_response_code(200);
       echo json_encode(["success" => true]);
     } catch (PDOException $e) {
       http_response_code(500);
@@ -343,6 +353,7 @@ class Controller
         ":password" => $hashedPassword,
         ":name" => $name,
       ]);
+      http_response_code(201);
       echo json_encode(["id" => $this->db->lastInsertId()]);
     } catch (PDOException $e) {
       http_response_code(500);
@@ -373,6 +384,7 @@ class Controller
         ":password" => $hashedPassword,
         ":name" => $name,
       ]);
+      http_response_code(200);
       echo json_encode(["success" => true]);
     } catch (PDOException $e) {
       http_response_code(500);
@@ -401,6 +413,7 @@ class Controller
       $stmt->execute([":id" => $id]);
 
       $this->db->commit();
+      http_response_code(200);
       echo json_encode(["success" => true]);
     } catch (PDOException $e) {
       $this->db->rollBack();
