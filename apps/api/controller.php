@@ -508,7 +508,7 @@ class Controller
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // if user, then only display current user
-    if ($roleId === 1) {
+    if ($roleId === 3) {
       $users = array_filter($users, function ($user) {
         return $user["id"] === $_SESSION["user_id"];
       });
@@ -534,9 +534,8 @@ class Controller
     $stmt = $this->db->prepare($sql);
     $stmt->execute(["id" => $_SESSION["user_id"]]);
     $currentUserInfo = $stmt->fetch(PDO::FETCH_ASSOC);
-    $roleId = $currentUserInfo["roleId"];
 
-    if ($roleId !== 1) {
+    if ($currentUserInfo["roleId"] !== 1) {
       http_response_code(403);
       echo json_encode(["error" => "Forbidden"]);
       return;

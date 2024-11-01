@@ -36,7 +36,6 @@ export default function App() {
     });
     setTable("bugs");
     mutate(`${BASE_URL}/api/current-user`);
-    mutate(`${BASE_URL}/api/bugs`);
   }
 
   return (
