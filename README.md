@@ -36,10 +36,25 @@ graph LR
 - Authentication: Sessions
 
 ## API Endpoints
-- `/api/auth` - Authentication endpoints
-- `/api/bugs` - Bug management endpoints
-- `/api/projects` - Project management endpoints
-- `/api/users` - User management endpoints
+- `/api/` - Initialize seed data
+- `/api/login` - User login
+- `/api/logout` - User logout
+- `/api/current-user` - Get current logged-in user
+- `/api/bugs` - Get all bugs
+- `/api/bug` - Create a new bug
+- `/api/bug/{id}` - Update a bug by ID
+- `/api/projects` - Get all projects
+- `/api/project` - Create a new project
+- `/api/roles` - Get all roles
+- `/api/priorities` - Get all priorities
+- `/api/assign` - Assign a bug to a user
+- `/api/close` - Close a bug with a fix description
+- `/api/users` - Get all users
+- `/api/users/project/{projectId}` - Get users by project ID
+- `/api/user/{id}` - Get a user by ID
+- `/api/user` - Create a new user
+- `/api/user/{id}` - Update a user by ID
+- `/api/user/delete/{id}` - Delete a user by ID (GET method due to server limitations)
 
 ## User Roles and Permissions
 - **Admin**: Full system access
